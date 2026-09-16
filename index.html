@@ -639,7 +639,7 @@
     }
     .film iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
-    .downloads { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+    .downloads { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line); }
     .dl {
         display: flex;
         justify-content: space-between;
@@ -1153,24 +1153,13 @@
             </div>
 
             <div class="downloads">
-                <a href="assets/Catalogo%20-%20Love%20Your%20Dream%20-%20Pagina%20Singola.pdf" class="dl" target="_blank">
+                <a href="assets/Catalogo%20-%20Love%20Your%20Dream%20-%20Pagina%20Singola.pdf" id="catalog-link" data-pdf-it="assets/Catalogo%20-%20Love%20Your%20Dream%20-%20Pagina%20Singola.pdf" data-pdf-en="assets/Catalog%20-%20LYD%20-%20UK.pdf" class="dl" target="_blank">
                     <span class="dl__label">
                         <span class="i18n-it is-block">Consulta il Catalogo (PDF)</span>
                         <span class="i18n-en is-block">View Catalog (PDF)</span>
                         <span>
                             <span class="i18n-it">Scarica il catalogo prodotti</span>
                             <span class="i18n-en">Download the product catalog</span>
-                        </span>
-                    </span>
-                    <span class="dl__arrow">→</span>
-                </a>
-                <a href="assets/Manuale%20LYD%209000%20e%20LYD%209009.pdf" class="dl" target="_blank">
-                    <span class="dl__label">
-                        <span class="i18n-it is-block">Consulta il Manuale d'Uso (PDF)</span>
-                        <span class="i18n-en is-block">View User Manual (PDF)</span>
-                        <span>
-                            <span class="i18n-it">Istruzioni per LYD9000 e LYD9009</span>
-                            <span class="i18n-en">Instructions for LYD9000 and LYD9009</span>
                         </span>
                     </span>
                     <span class="dl__arrow">→</span>
@@ -1248,6 +1237,14 @@
             if (iframe.getAttribute("src") !== wanted) iframe.setAttribute("src", wanted);
         }
 
+        function applyCatalog(lang) {
+            var link = document.getElementById("catalog-link");
+            if (!link) return;
+            var href = (lang === "en") ? link.getAttribute("data-pdf-en")
+                                       : link.getAttribute("data-pdf-it");
+            if (href) link.setAttribute("href", href);
+        }
+
         function setLang(lang) {
             if (lang !== "en") lang = "it";
             var root = document.documentElement;
@@ -1261,6 +1258,7 @@
             if (btnEn) btnEn.setAttribute("aria-pressed", String(lang === "en"));
 
             applyVideo(lang);
+            applyCatalog(lang);
 
             try { localStorage.setItem("lyd-lang", lang); } catch (e) {}
         }

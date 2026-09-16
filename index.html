@@ -19,7 +19,7 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Love Your Dream – Vasca Multifunzionale per Cucina">
     <meta property="og:description" content="Every great kitchen starts with a dream. Scopri le vasche tecnologiche di alta gamma LYD9009 e LYD9000.">
-    <meta property="og:image" content="https://www.loveyourdream.shop/LYD%209009%20AMB.jpg">
+    <meta property="og:image" content="assets/LYD%209009%20AMB.jpg">
     <meta property="og:url" content="https://www.loveyourdream.shop/">
     <meta property="og:site_name" content="Love Your Dream">
 
@@ -116,6 +116,30 @@
 
     a { color: inherit; }
 
+    /* =====================================================================
+       COMMUTAZIONE LINGUA
+       Il documento porta la classe .lang-it o .lang-en su <html>.
+       - .i18n-it  → visibile solo in italiano
+       - .i18n-en  → visibile solo in inglese
+       Regola: gli elementi di lingua sono nascosti di default e mostrati
+       solo quando la classe combacia. Vale per span/blocchi in linea e
+       per elementi a livello di blocco.
+    ===================================================================== */
+    /* Nascondi SEMPRE la lingua non attiva (anche le varianti .is-block).
+       La classe .lang-it/.lang-en su <html> decide quale mostrare. */
+    html.lang-en .i18n-it,
+    html.lang-it .i18n-en { display: none !important; }
+    /* Mostra la lingua attiva */
+    html.lang-it .i18n-it { display: inline; }
+    html.lang-en .i18n-en { display: inline; }
+    /* Varianti a blocco (vanno a capo) */
+    html.lang-it .i18n-it.is-block { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(0.95rem, 1.6vw, 1.15rem);font-style: normal; letter-spacing: -0.01em; line-height: 1.3; color: #1a1917;}
+    html.lang-en .i18n-en.is-block { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(0.95rem, 1.6vw, 1.15rem);font-style: normal; letter-spacing: -0.01em; line-height: 1.3; color: #1a1917;}
+    /* Fallback prima che parta il JS: mostra solo l'italiano, mai entrambe */
+    html:not(.lang-it):not(.lang-en) .i18n-en { display: none !important; }
+    html:not(.lang-it):not(.lang-en) .i18n-it { display: inline; }
+    html:not(.lang-it):not(.lang-en) .i18n-it.is-block { display: block; }
+
     /* ======================= HEADER ======================= */
     header {
         position: sticky;
@@ -139,6 +163,11 @@
         display: block;
         /* logo PNG trasparente: nessun blend necessario */
     }
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+    }
     .btn-header-quick {
         font-family: var(--display);
         font-weight: 500;
@@ -154,10 +183,50 @@
     }
     .btn-header-quick:hover { opacity: 0.55; }
 
+    /* Selettore lingua IT / EN */
+    .lang-switch {
+        display: inline-flex;
+        align-items: center;
+        font-family: var(--display);
+        font-weight: 500;
+        font-size: 0.68rem;
+        letter-spacing: 0.14em;
+        line-height: 1;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        overflow: hidden;
+        background: rgba(255,255,255,0.35);
+        flex-shrink: 0;
+    }
+    .lang-switch button {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        color: var(--ink-mute);
+        font: inherit;
+        letter-spacing: inherit;
+        padding: 8px 13px;
+        cursor: pointer;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+    .lang-switch button + button { border-left: 1px solid var(--line); }
+    .lang-switch button:hover { color: var(--ink); }
+    .lang-switch button[aria-pressed="true"] {
+        background: var(--ink);
+        color: var(--paper);
+    }
+
     @media (max-width: 620px) {
         .header-flex { padding: 16px 0; }
         header img { max-width: 122px; }
+        .header-actions { gap: 14px; }
         .btn-header-quick { font-size: 0.6rem; letter-spacing: 0.16em; }
+        .lang-switch { font-size: 0.62rem; }
+        .lang-switch button { padding: 7px 10px; }
+    }
+    @media (max-width: 460px) {
+        /* Su schermi molto stretti nascondi il testo lungo, tieni logo + lingua */
+        .btn-header-quick { display: none; }
     }
 
     /* ======================= HERO ======================= */
@@ -228,6 +297,12 @@
         max-width: 30ch;
         text-shadow: 0 1px 16px rgba(242,239,233,0.92);
     }
+    /* La variante di lingua inline nel titolo resta a livello di blocco */
+    .hero__title span.i18n-it, .hero__title span.i18n-en { display: none; }
+    html.lang-it .hero__title span.i18n-it { display: block; }
+    html.lang-en .hero__title span.i18n-en { display: block; }
+    html:not(.lang-it):not(.lang-en) .hero__title span.i18n-it { display: block; }
+
     .hero__quote {
         font-family: var(--display);
         font-weight: 500;
@@ -476,11 +551,9 @@
         color: var(--ink);
     }
     .spec__v { font-size: 0.92rem; color: var(--ink-soft); line-height: 1.6; }
-    .spec__v .lang-en { display: block; color: var(--ink-mute); font-style: italic; font-size: 0.82rem; margin-top: 2px; }
 
     .accessories { margin-top: 40px; }
     .accessories p { font-size: 0.9rem; color: var(--ink-soft); }
-    .accessories .lang-en { display: block; color: var(--ink-mute); font-style: italic; font-size: 0.82rem; margin-top: 4px; }
 
     /* Disegno tecnico */
     .drawing {
@@ -534,12 +607,26 @@
     .resources__title {
         font-family: var(--display);
         font-weight: 300;
-        font-size: clamp(1.8rem, 4vw, 3rem);
-        letter-spacing: -0.02em;
-        line-height: 1;
+        font-size: clamp(2.2rem, 6vw, 4.6rem);
+        letter-spacing: -0.03em;
+        line-height: 0.9;
         color: var(--ink);
     }
-    .resources__title span { display: block; font-size: 0.9rem; font-style: italic; color: var(--ink-mute); margin-top: 12px; letter-spacing: 0; }
+    /* Gli span di lingua nel titolo NON hanno dimensione propria: ereditano dall'h2 (grande). */
+    .resources__title > .i18n-it,
+    .resources__title > .i18n-en { font-size: inherit; letter-spacing: inherit; line-height: inherit; }
+    /* Solo il sottotitolo dedicato è piccolo e in corsivo. */
+    .resources__title-sub {
+        display: block;
+        font-family: var(--body);
+        font-weight: 300;
+        font-size: clamp(0.72rem, 1.4vw, 0.9rem);
+        font-style: italic;
+        letter-spacing: 0.02em;
+        line-height: 1.4;
+        color: var(--ink-soft);
+        margin-top: 14px;
+    }
 
     .film {
         position: relative;
@@ -569,7 +656,7 @@
     .dl__label {
         font-family: var(--display);
         font-weight: 400;
-        font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+        font-size: 1.15rem;
         letter-spacing: -0.01em;
         line-height: 1.3;
     }
@@ -665,34 +752,51 @@
     <header>
         <div class="shell header-flex">
             <img src="assets/logo.png" alt="Love Your Dream Logo">
-            <a href="#presentazione-download" class="btn-header-quick">
-                Presentazione &amp; Download / Media
-            </a>
+            <div class="header-actions">
+                <a href="#presentazione-download" class="btn-header-quick">
+                    <span class="i18n-it">Presentazione &amp; Download / Media</span>
+                    <span class="i18n-en">Presentation &amp; Download / Media</span>
+                </a>
+                <div class="lang-switch" role="group" aria-label="Selettore lingua / Language selector">
+                    <button type="button" id="lang-it" onclick="setLang('it')" aria-pressed="true" lang="it">IT</button>
+                    <button type="button" id="lang-en" onclick="setLang('en')" aria-pressed="false" lang="en">EN</button>
+                </div>
+            </div>
         </div>
     </header>
 
     <!-- ======================= HERO ======================= -->
     <section class="hero">
-        <video class="hero-video-bg" autoplay loop muted playsinline poster="LYD 9009 AMB.jpg">
-            <source src="https://loveyourdream.shop/hero-loop.mp4" type="video/mp4">
+        <video class="hero-video-bg" autoplay loop muted playsinline poster="assets/LYD 9009 AMB.jpg">
+            <source src="assets/hero-loop.mp4" type="video/mp4">
         </video>
 
         <div class="hero__inner">
-            <p class="eyebrow hero__eyebrow">Vasca Multifunzionale per Cucina</p>
+            <p class="eyebrow hero__eyebrow">
+                <span class="i18n-it">Vasca Multifunzionale per Cucina</span>
+                <span class="i18n-en">Multifunctional Kitchen Sink</span>
+            </p>
             <h1 class="hero__title">
                 Love Your Dream
-                <span>Il cuore tecnologico della tua cucina, disegnato attorno a un gesto quotidiano.</span>
+                <span class="i18n-it">Il cuore tecnologico della tua cucina, disegnato attorno a un gesto quotidiano.</span>
+                <span class="i18n-en">The technological heart of your kitchen, designed around an everyday gesture.</span>
             </h1>
             <p class="hero__quote">Every great kitchen starts with a dream</p>
-            <p class="hero__subquote">Ogni grande cucina nasce da un sogno</p>
+            <p class="hero__subquote">
+                <span class="i18n-it">Ogni grande cucina nasce da un sogno</span>
+                <span class="i18n-en">Every great kitchen starts with a dream</span>
+            </p>
         </div>
 
         <div class="hero__foot">
             <p class="hero__tagline">
-                The technological heart of your kitchen
-                <em>Il cuore tecnologico della tua cucina</em>
+                <span class="i18n-it">Il cuore tecnologico della tua cucina</span>
+                <span class="i18n-en">The technological heart of your kitchen</span>
             </p>
-            <p class="hero__scroll">↓ Scorri</p>
+            <p class="hero__scroll">
+                <span class="i18n-it">↓ Scorri</span>
+                <span class="i18n-en">↓ Scroll</span>
+            </p>
         </div>
     </section>
 
@@ -703,17 +807,26 @@
                 <div class="manifesto__item">
                     <span class="manifesto__num">I</span>
                     <h2 class="manifesto__head">Italian Engineering</h2>
-                    <p class="manifesto__body">Progettazione e sviluppo in Italia / <em>Designed &amp; engineered in Italy</em></p>
+                    <p class="manifesto__body">
+                        <span class="i18n-it">Progettazione e sviluppo in Italia</span>
+                        <span class="i18n-en">Designed &amp; engineered in Italy</span>
+                    </p>
                 </div>
                 <div class="manifesto__item">
                     <span class="manifesto__num">II</span>
                     <h2 class="manifesto__head">Premium Materials</h2>
-                    <p class="manifesto__body">Acciaio inox 304, finitura PVD Black / <em>304 Stainless Steel, PVD Black finish</em></p>
+                    <p class="manifesto__body">
+                        <span class="i18n-it">Acciaio inox 304, finitura PVD Black</span>
+                        <span class="i18n-en">304 Stainless Steel, PVD Black finish</span>
+                    </p>
                 </div>
                 <div class="manifesto__item">
                     <span class="manifesto__num">III</span>
                     <h2 class="manifesto__head">Certified Safety</h2>
-                    <p class="manifesto__body">Il massimo delle certificazioni</p>
+                    <p class="manifesto__body">
+                        <span class="i18n-it">Il massimo delle certificazioni</span>
+                        <span class="i18n-en">The highest standard of certifications</span>
+                    </p>
                     <div class="cert-line">
                         <div class="cert-item">KTW-BWGL <span>Germany</span></div>
                         <div class="cert-item">MOCA <span>Italy</span></div>
@@ -723,7 +836,10 @@
                 <div class="manifesto__item">
                     <span class="manifesto__num">IV</span>
                     <h2 class="manifesto__head">Designed for Everyday Use</h2>
-                    <p class="manifesto__body">Tecnologia e praticità per la cucina moderna / <em>Technology &amp; practicality for modern kitchens</em></p>
+                    <p class="manifesto__body">
+                        <span class="i18n-it">Tecnologia e praticità per la cucina moderna</span>
+                        <span class="i18n-en">Technology &amp; practicality for modern kitchens</span>
+                    </p>
                 </div>
             </div>
         </div>
@@ -735,76 +851,121 @@
             <div class="product__masthead">
                 <h2 class="product__ref">
                     LYD9009
-                    <small>Sink Multifunzionale</small>
+                    <small>
+                        <span class="i18n-it">Sink Multifunzionale</span>
+                        <span class="i18n-en">Multifunctional Sink</span>
+                    </small>
                 </h2>
                 <div class="product__index">
-                    Modello 01 / 02
-                    <b>Top di gamma · Flagship</b>
+                    <span class="i18n-it">Modello 01 / 02</span>
+                    <span class="i18n-en">Model 01 / 02</span>
+                    <b>
+                        <span class="i18n-it">Top di gamma · Flagship</span>
+                        <span class="i18n-en">Flagship</span>
+                    </b>
                 </div>
             </div>
 
             <div class="product__layout">
                 <figure class="frame">
                     <div class="frame__img" onclick="openModal(this.querySelector('img').src, 'Sink Multifunzionale LYD9009')">
-                        <img src="https://loveyourdream.shop/LYD%209009%20AMB.jpg" alt="Vasca multifunzionale Love Your Dream LYD9009 ambientata">
+                        <img src="assets/LYD%209009%20AMB.jpg" alt="Vasca multifunzionale Love Your Dream LYD9009 ambientata">
                     </div>
                     <figcaption class="frame__cap">
-                        <span>LYD9009 · Ambientazione</span>
-                        <span>Clicca per ingrandire</span>
+                        <span>LYD9009 · <span class="i18n-it">Ambientazione</span><span class="i18n-en">Lifestyle</span></span>
+                        <span>
+                            <span class="i18n-it">Clicca per ingrandire</span>
+                            <span class="i18n-en">Click to enlarge</span>
+                        </span>
                     </figcaption>
                 </figure>
 
                 <div class="spec">
-                    <p class="spec__title">Caratteristiche / Features</p>
+                    <p class="spec__title">
+                        <span class="i18n-it">Caratteristiche</span>
+                        <span class="i18n-en">Features</span>
+                    </p>
                     <ul class="spec__list">
                         <li>
-                            <span class="spec__k">Materiale &amp; Finitura / Material &amp; Finish</span>
-                            <span class="spec__v">Acciaio INOX 304 con texture Honeycomb e finitura PVD Black.
-                                <span class="lang-en">304 Stainless Steel with Honeycomb texture and PVD Black finish.</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Materiale &amp; Finitura</span>
+                                <span class="i18n-en">Material &amp; Finish</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">Acciaio INOX 304 con texture Honeycomb e finitura PVD Black.</span>
+                                <span class="i18n-en">304 Stainless Steel with Honeycomb texture and PVD Black finish.</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Postazione di Lavoro / Workstation</span>
-                            <span class="spec__v">Workstation a 3 livelli integrati.
-                                <span class="lang-en">3 integrated functional levels workstation.</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Postazione di Lavoro</span>
+                                <span class="i18n-en">Workstation</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">Workstation a 3 livelli integrati.</span>
+                                <span class="i18n-en">3 integrated functional levels workstation.</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Funzioni Avanzate / Advanced Features</span>
-                            <span class="spec__v">Cup Washer (risciacquo bicchieri), getto Waterfall (a cascata), getto Rain e Doccia estraibile a 3 getti.
-                                <span class="lang-en">Cup Washer, Waterfall stream, Rain shower stream, and 3-spray pull-out faucet.</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Funzioni Avanzate</span>
+                                <span class="i18n-en">Advanced Features</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">Cup Washer (risciacquo bicchieri), getto Waterfall (a cascata), getto Rain e Doccia estraibile a 3 getti.</span>
+                                <span class="i18n-en">Cup Washer, Waterfall stream, Rain shower stream, and 3-spray pull-out faucet.</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Display Digitale / Digital Display</span>
-                            <span class="spec__v">Temperatura e timer integrati azionati idroelettricamente (zero batterie).
-                                <span class="lang-en">Hydroelectrically powered digital temperature and timer display (zero batteries).</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Display Digitale</span>
+                                <span class="i18n-en">Digital Display</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">Temperatura e timer integrati azionati idroelettricamente (zero batterie).</span>
+                                <span class="i18n-en">Hydroelectrically powered digital temperature and timer display (zero batteries).</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Controlli Integrati / Integrated Controls</span>
-                            <span class="spec__v">Dispenser sapone integrato e Comando remoto per la chiusura dello scarico.
-                                <span class="lang-en">Integrated soap dispenser and remote drain control knob.</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Controlli Integrati</span>
+                                <span class="i18n-en">Integrated Controls</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">Dispenser sapone integrato e Comando remoto per la chiusura dello scarico.</span>
+                                <span class="i18n-en">Integrated soap dispenser and remote drain control knob.</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Certificazioni / Certifications</span>
-                            <span class="spec__v">KTW-BWGL, MOCA (Italy), LFGB (Germany + EU) per la massima sicurezza igienica.
-                                <span class="lang-en">KTW-BWGL, MOCA (Italy), LFGB (Germany + EU) certified for maximum hygienic safety.</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Certificazioni</span>
+                                <span class="i18n-en">Certifications</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">KTW-BWGL, MOCA (Italy), LFGB (Germany + EU) per la massima sicurezza igienica.</span>
+                                <span class="i18n-en">KTW-BWGL, MOCA (Italy), LFGB (Germany + EU) certified for maximum hygienic safety.</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Dimensioni / Dimensions</span>
-                            <span class="spec__v">860x500 mm (Foro incasso / Cutout: 840x480 mm - Sopratop su base da 90 cm)
-                                <span class="lang-en">Topmount for 90 cm cabinet</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Dimensioni</span>
+                                <span class="i18n-en">Dimensions</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">860x500 mm (Foro incasso: 840x480 mm - Sopratop su base da 90 cm)</span>
+                                <span class="i18n-en">860x500 mm (Cutout: 840x480 mm - Topmount for 90 cm cabinet)</span>
                             </span>
                         </li>
                     </ul>
 
                     <div class="accessories">
-                        <p class="spec__title" style="margin-bottom:10px;">Accessori Inclusi / Included Accessories</p>
-                        <p>Vaschetta Inox con tappo, Cestello Inox forato, Tagliere Inox satinato, Tagliere in legno di Bambù, Panno microfibra, 2 spugne.
-                            <span class="lang-en">Stainless steel basin with drain plug, perforated stainless steel basket, satin stainless steel cutting board, bamboo cutting board, microfiber cloth, 2 cleaning sponges.</span>
+                        <p class="spec__title" style="margin-bottom:10px;">
+                            <span class="i18n-it">Accessori Inclusi</span>
+                            <span class="i18n-en">Included Accessories</span>
+                        </p>
+                        <p>
+                            <span class="i18n-it">Vaschetta Inox con tappo, Cestello Inox forato, Tagliere Inox satinato, Tagliere in legno di Bambù, Panno microfibra, 2 spugne.</span>
+                            <span class="i18n-en">Stainless steel basin with drain plug, perforated stainless steel basket, satin stainless steel cutting board, bamboo cutting board, microfiber cloth, 2 cleaning sponges.</span>
                         </p>
                     </div>
                 </div>
@@ -812,11 +973,17 @@
 
             <div class="drawing">
                 <div class="drawing__meta">
-                    <p class="spec__title">Disegno Tecnico / Technical Drawing LYD9009</p>
-                    <p>Quote e ingombri per l'incasso. Clicca per ingrandire / <em>Click to enlarge</em>.</p>
+                    <p class="spec__title">
+                        <span class="i18n-it">Disegno Tecnico LYD9009</span>
+                        <span class="i18n-en">Technical Drawing LYD9009</span>
+                    </p>
+                    <p>
+                        <span class="i18n-it">Quote e ingombri per l'incasso. Clicca per ingrandire.</span>
+                        <span class="i18n-en">Dimensions and clearances for installation. Click to enlarge.</span>
+                    </p>
                 </div>
                 <div class="drawing__img" onclick="openModal(this.querySelector('img').src, 'Disegno Tecnico LYD9009')">
-                    <img src="https://loveyourdream.shop/LYD_9009.png" alt="Disegno tecnico vasca multifunzione LYD9009">
+                    <img src="assets/LYD_9009.png" alt="Disegno tecnico vasca multifunzione LYD9009">
                 </div>
             </div>
         </div>
@@ -828,76 +995,121 @@
             <div class="product__masthead">
                 <h2 class="product__ref">
                     LYD9000
-                    <small>Sink Multifunzionale</small>
+                    <small>
+                        <span class="i18n-it">Sink Multifunzionale</span>
+                        <span class="i18n-en">Multifunctional Sink</span>
+                    </small>
                 </h2>
                 <div class="product__index">
-                    Modello 02 / 02
-                    <b>Design LED · GunGrey</b>
+                    <span class="i18n-it">Modello 02 / 02</span>
+                    <span class="i18n-en">Model 02 / 02</span>
+                    <b>
+                        <span class="i18n-it">Design LED · GunGrey</span>
+                        <span class="i18n-en">LED Design · GunGrey</span>
+                    </b>
                 </div>
             </div>
 
             <div class="product__layout">
                 <figure class="frame">
                     <div class="frame__img" onclick="openModal(this.querySelector('img').src, 'Sink Multifunzionale LYD9000')">
-                        <img src="https://loveyourdream.shop/LYD%209000%20AMB.jpg" alt="Vasca multifunzionale Love Your Dream LYD9000 ambientata">
+                        <img src="assets/LYD%209000%20AMB.jpg" alt="Vasca multifunzionale Love Your Dream LYD9000 ambientata">
                     </div>
                     <figcaption class="frame__cap">
-                        <span>LYD9000 · Ambientazione</span>
-                        <span>Clicca per ingrandire</span>
+                        <span>LYD9000 · <span class="i18n-it">Ambientazione</span><span class="i18n-en">Lifestyle</span></span>
+                        <span>
+                            <span class="i18n-it">Clicca per ingrandire</span>
+                            <span class="i18n-en">Click to enlarge</span>
+                        </span>
                     </figcaption>
                 </figure>
 
                 <div class="spec">
-                    <p class="spec__title">Caratteristiche / Features</p>
+                    <p class="spec__title">
+                        <span class="i18n-it">Caratteristiche</span>
+                        <span class="i18n-en">Features</span>
+                    </p>
                     <ul class="spec__list">
                         <li>
-                            <span class="spec__k">Materiale &amp; Finitura / Material &amp; Finish</span>
-                            <span class="spec__v">Acciaio INOX 304 con texture Honeycomb e finitura PVD Black.
-                                <span class="lang-en">304 Stainless Steel with Honeycomb texture and PVD Black finish.</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Materiale &amp; Finitura</span>
+                                <span class="i18n-en">Material &amp; Finish</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">Acciaio INOX 304 con texture Honeycomb e finitura PVD Black.</span>
+                                <span class="i18n-en">304 Stainless Steel with Honeycomb texture and PVD Black finish.</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Postazione di Lavoro / Workstation</span>
-                            <span class="spec__v">Workstation a 3 livelli integrati.
-                                <span class="lang-en">3 integrated functional levels workstation.</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Postazione di Lavoro</span>
+                                <span class="i18n-en">Workstation</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">Workstation a 3 livelli integrati.</span>
+                                <span class="i18n-en">3 integrated functional levels workstation.</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Rubinetteria / Faucet Assembly</span>
-                            <span class="spec__v">Corpo Acciaio INOX 304 GunGrey con inserto in vetro nero e LED blu.
-                                <span class="lang-en">GunGrey 304 Stainless Steel body with black glass insert and integrated blue LED.</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Rubinetteria</span>
+                                <span class="i18n-en">Faucet Assembly</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">Corpo Acciaio INOX 304 GunGrey con inserto in vetro nero e LED blu.</span>
+                                <span class="i18n-en">GunGrey 304 Stainless Steel body with black glass insert and integrated blue LED.</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Display Digitale / Digital Display</span>
-                            <span class="spec__v">Mostra temperatura e timer acqua, azionato da turbina idroelettrica integrata (zero batterie).
-                                <span class="lang-en">Displays water temperature and timer, powered by integrated hydroelectric turbine (zero batteries).</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Display Digitale</span>
+                                <span class="i18n-en">Digital Display</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">Mostra temperatura e timer acqua, azionato da turbina idroelettrica integrata (zero batterie).</span>
+                                <span class="i18n-en">Displays water temperature and timer, powered by integrated hydroelectric turbine (zero batteries).</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Erogazioni / Water Outlets</span>
-                            <span class="spec__v">Doccia estraibile triplo getto (Standard, Spray, Jet) e getto a pioggia Rain.
-                                <span class="lang-en">Pull-out 3-spray shower (Standard, Spray, Jet) and Rain shower stream.</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Erogazioni</span>
+                                <span class="i18n-en">Water Outlets</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">Doccia estraibile triplo getto (Standard, Spray, Jet) e getto a pioggia Rain.</span>
+                                <span class="i18n-en">Pull-out 3-spray shower (Standard, Spray, Jet) and Rain shower stream.</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Certificazioni / Certifications</span>
-                            <span class="spec__v">KTW-BWGL, MOCA (Italy), LFGB (Germany + EU) per la massima sicurezza igienica.
-                                <span class="lang-en">KTW-BWGL, MOCA (Italy), LFGB (Germany + EU) certified for maximum hygienic safety.</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Certificazioni</span>
+                                <span class="i18n-en">Certifications</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">KTW-BWGL, MOCA (Italy), LFGB (Germany + EU) per la massima sicurezza igienica.</span>
+                                <span class="i18n-en">KTW-BWGL, MOCA (Italy), LFGB (Germany + EU) certified for maximum hygienic safety.</span>
                             </span>
                         </li>
                         <li>
-                            <span class="spec__k">Dimensioni / Dimensions</span>
-                            <span class="spec__v">860x500 mm (Foro incasso / Cutout: 840x480 mm - Sopratop su base da 90 cm)
-                                <span class="lang-en">Topmount for 90 cm cabinet</span>
+                            <span class="spec__k">
+                                <span class="i18n-it">Dimensioni</span>
+                                <span class="i18n-en">Dimensions</span>
+                            </span>
+                            <span class="spec__v">
+                                <span class="i18n-it">860x500 mm (Foro incasso: 840x480 mm - Sopratop su base da 90 cm)</span>
+                                <span class="i18n-en">860x500 mm (Cutout: 840x480 mm - Topmount for 90 cm cabinet)</span>
                             </span>
                         </li>
                     </ul>
 
                     <div class="accessories">
-                        <p class="spec__title" style="margin-bottom:10px;">Accessori Inclusi / Included Accessories</p>
-                        <p>Vaschetta Inox con tappo, Cestello Inox forato, Tagliere Inox satinato, Tagliere in legno di Bambù, Panno microfibra, 2 spugne.
-                            <span class="lang-en">Stainless steel basin with drain plug, perforated stainless steel basket, satin stainless steel cutting board, bamboo cutting board, microfiber cloth, 2 cleaning sponges.</span>
+                        <p class="spec__title" style="margin-bottom:10px;">
+                            <span class="i18n-it">Accessori Inclusi</span>
+                            <span class="i18n-en">Included Accessories</span>
+                        </p>
+                        <p>
+                            <span class="i18n-it">Vaschetta Inox con tappo, Cestello Inox forato, Tagliere Inox satinato, Tagliere in legno di Bambù, Panno microfibra, 2 spugne.</span>
+                            <span class="i18n-en">Stainless steel basin with drain plug, perforated stainless steel basket, satin stainless steel cutting board, bamboo cutting board, microfiber cloth, 2 cleaning sponges.</span>
                         </p>
                     </div>
                 </div>
@@ -905,11 +1117,17 @@
 
             <div class="drawing">
                 <div class="drawing__meta">
-                    <p class="spec__title">Disegno Tecnico / Technical Drawing LYD9000</p>
-                    <p>Quote e ingombri per l'incasso. Clicca per ingrandire / <em>Click to enlarge</em>.</p>
+                    <p class="spec__title">
+                        <span class="i18n-it">Disegno Tecnico LYD9000</span>
+                        <span class="i18n-en">Technical Drawing LYD9000</span>
+                    </p>
+                    <p>
+                        <span class="i18n-it">Quote e ingombri per l'incasso. Clicca per ingrandire.</span>
+                        <span class="i18n-en">Dimensions and clearances for installation. Click to enlarge.</span>
+                    </p>
                 </div>
                 <div class="drawing__img" onclick="openModal(this.querySelector('img').src, 'Disegno Tecnico LYD9000')">
-                    <img src="https://loveyourdream.shop/LYD_9000.png" alt="Disegno tecnico vasca multifunzione LYD9000">
+                    <img src="assets/LYD_9000.png" alt="Disegno tecnico vasca multifunzione LYD9000">
                 </div>
             </div>
         </div>
@@ -920,22 +1138,41 @@
         <div class="shell">
             <div class="resources__head">
                 <h2 class="resources__title">
-                    Presentazione &amp; Download
-                    <span>Video &amp; Download — Guarda il video e scarica il materiale / Watch the video and download materials</span>
+                    <span class="i18n-it">Presentazione &amp; Download</span>
+                    <span class="i18n-en">Presentation &amp; Download</span>
+                    <span class="resources__title-sub">
+                        <span class="i18n-it">Video &amp; Download — Guarda il video e scarica il materiale</span>
+                        <span class="i18n-en">Video &amp; Download — Watch the video and download materials</span>
+                    </span>
                 </h2>
             </div>
 
             <div class="film">
-                <iframe src="https://www.youtube.com/embed/BP49pd8HVwg" title="Love Your Dream Presentation Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <!-- L'src viene impostato da JS in base alla lingua (id video IT/EN) -->
+                <iframe id="presentation-video" src="" data-video-it="BP49pd8HVwg" data-video-en="WC2P7-I9xJ4" title="Love Your Dream Presentation Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
 
             <div class="downloads">
-                <a href="https://loveyourdream.shop/Catalogo%20-%20Love%20Your%20Dream%20-%20Pagina%20Singola.pdf" class="dl" target="_blank">
-                    <span class="dl__label">Consulta il Catalogo (PDF)<span>View Catalog</span></span>
+                <a href="assets/Catalogo%20-%20Love%20Your%20Dream%20-%20Pagina%20Singola.pdf" class="dl" target="_blank">
+                    <span class="dl__label">
+                        <span class="i18n-it is-block">Consulta il Catalogo (PDF)</span>
+                        <span class="i18n-en is-block">View Catalog (PDF)</span>
+                        <span>
+                            <span class="i18n-it">Scarica il catalogo prodotti</span>
+                            <span class="i18n-en">Download the product catalog</span>
+                        </span>
+                    </span>
                     <span class="dl__arrow">→</span>
                 </a>
-                <a href="https://loveyourdream.shop/Manuale%20LYD%209000%20e%20LYD%209009.pdf" class="dl" target="_blank">
-                    <span class="dl__label">Consulta il Manuale d'Uso (PDF)<span>View User Manual</span></span>
+                <a href="assets/Manuale%20LYD%209000%20e%20LYD%209009.pdf" class="dl" target="_blank">
+                    <span class="dl__label">
+                        <span class="i18n-it is-block">Consulta il Manuale d'Uso (PDF)</span>
+                        <span class="i18n-en is-block">View User Manual (PDF)</span>
+                        <span>
+                            <span class="i18n-it">Istruzioni per LYD9000 e LYD9009</span>
+                            <span class="i18n-en">Instructions for LYD9000 and LYD9009</span>
+                        </span>
+                    </span>
                     <span class="dl__arrow">→</span>
                 </a>
             </div>
@@ -953,29 +1190,83 @@
         <div class="shell">
             <div class="footer-grid">
                 <div class="footer-box">
-                    <h3>Produttore / Manufacturer</h3>
+                    <h3>
+                        <span class="i18n-it">Produttore</span>
+                        <span class="i18n-en">Manufacturer</span>
+                    </h3>
                     <p><strong>Love Your Dream HK Limited</strong></p>
                     <p>Room B 16\F Eubank Plaza 9</p>
                     <p>Chiu Lung Street Central, Hong Kong</p>
                     <p>E-mail: <a href="mailto:info@loveyourdream.shop">info@loveyourdream.shop</a></p>
                 </div>
                 <div class="footer-box">
-                    <h3>Distributore per l'Europa / European Distributor</h3>
+                    <h3>
+                        <span class="i18n-it">Distributore per l'Europa</span>
+                        <span class="i18n-en">European Distributor</span>
+                    </h3>
                     <p><strong>Decox S.p.A.</strong></p>
                     <p>Via Margherita De Vizzi Viganò, 18</p>
                     <p>20092 Cinisello Balsamo (MI) - Italy</p>
-                    <p>Tel. +39 02 / 97.133.003</p>
+                    <p>
+                        <span class="i18n-it">Tel. +39 02 / 97.133.003</span>
+                        <span class="i18n-en">Phone +39 02 / 97.133.003</span>
+                    </p>
                     <p>Web: <a href="https://www.decoxelettrodomestici.it/" target="_blank" rel="noopener">www.decoxelettrodomestici.it</a></p>
                 </div>
             </div>
             <div class="copyright">
-                © 2026 Love Your Dream®. Tutti i diritti riservati / All rights reserved.
+                <span class="i18n-it">© 2026 Love Your Dream®. Tutti i diritti riservati.</span>
+                <span class="i18n-en">© 2026 Love Your Dream®. All rights reserved.</span>
             </div>
         </div>
     </footer>
 
     <!-- ======================= SCRIPT ======================= -->
     <script>
+        /* ---------- Lingua ---------- */
+        var VIDEO_BASE = "https://www.youtube.com/embed/";
+        var VIDEO_PARAMS = "?rel=0";
+
+        function applyVideo(lang) {
+            var iframe = document.getElementById("presentation-video");
+            if (!iframe) return;
+            var id = (lang === "en") ? iframe.getAttribute("data-video-en")
+                                     : iframe.getAttribute("data-video-it");
+            var wanted = VIDEO_BASE + id + VIDEO_PARAMS;
+            // Reimposta solo se cambia, così non ricarica inutilmente il player
+            if (iframe.getAttribute("src") !== wanted) iframe.setAttribute("src", wanted);
+        }
+
+        function setLang(lang) {
+            if (lang !== "en") lang = "it";
+            var root = document.documentElement;
+            root.classList.remove("lang-it", "lang-en");
+            root.classList.add("lang-" + lang);
+            root.setAttribute("lang", lang);
+
+            var btnIt = document.getElementById("lang-it");
+            var btnEn = document.getElementById("lang-en");
+            if (btnIt) btnIt.setAttribute("aria-pressed", String(lang === "it"));
+            if (btnEn) btnEn.setAttribute("aria-pressed", String(lang === "en"));
+
+            applyVideo(lang);
+
+            try { localStorage.setItem("lyd-lang", lang); } catch (e) {}
+        }
+
+        /* Scelta iniziale: 1) preferenza salvata  2) lingua del browser  3) italiano */
+        (function initLang() {
+            var saved = null;
+            try { saved = localStorage.getItem("lyd-lang"); } catch (e) {}
+            var lang = saved;
+            if (lang !== "it" && lang !== "en") {
+                var nav = (navigator.language || "it").toLowerCase();
+                lang = nav.indexOf("it") === 0 ? "it" : "en";
+            }
+            setLang(lang);
+        })();
+
+        /* ---------- Modal immagini ---------- */
         function openModal(imageSrc, altText) {
             var modal = document.getElementById("imageModal");
             var modalImg = document.getElementById("imgModalTarget");

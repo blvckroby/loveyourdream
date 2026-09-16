@@ -419,7 +419,7 @@
     }
     .cert-item {
         display: flex;
-        align-items: baseline;
+        align-items: center;
         gap: 10px;
         font-family: var(--display);
         font-size: 0.74rem;
@@ -429,7 +429,8 @@
         border-top: 1px solid var(--line-soft);
     }
     .cert-item span { color: var(--ink-mute); font-family: var(--body); font-size: 0.68rem; letter-spacing: 0; }
-
+    .cert-item img{ height: 18px; margin-left: auto;}
+    
     @media (max-width: 960px) {
         .manifesto__grid { grid-template-columns: repeat(2, 1fr); }
         .manifesto__item:nth-child(3) { border-left: none; }
@@ -828,9 +829,10 @@
                         <span class="i18n-en">The highest standard of certifications</span>
                     </p>
                     <div class="cert-line">
-                        <div class="cert-item">KTW-BWGL <span>Germany</span></div>
-                        <div class="cert-item">MOCA <span>Italy</span></div>
-                        <div class="cert-item">LFGB <span>Germany + EU</span></div>
+                        <div class="cert-item">KTW-BWGL <span>Germany</span><img src="assets/logos/ktw.jpg"></div>
+                        <div class="cert-item">MOCA <span>Italy</span><img src="assets/logos/moca.svg"></div>
+                        <div class="cert-item">LFGB <span>Germany + EU</span><img src="assets/logos/LFGB.png"></div>
+                        <div class="cert-item">CE <span>EU</span><img src="assets/logos/ce.svg"></div>
                     </div>
                 </div>
                 <div class="manifesto__item">

@@ -90,6 +90,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
     body {
         font-family: var(--body);
@@ -118,24 +119,13 @@
 
     /* =====================================================================
        COMMUTAZIONE LINGUA
-       Il documento porta la classe .lang-it o .lang-en su <html>.
-       - .i18n-it  → visibile solo in italiano
-       - .i18n-en  → visibile solo in inglese
-       Regola: gli elementi di lingua sono nascosti di default e mostrati
-       solo quando la classe combacia. Vale per span/blocchi in linea e
-       per elementi a livello di blocco.
     ===================================================================== */
-    /* Nascondi SEMPRE la lingua non attiva (anche le varianti .is-block).
-       La classe .lang-it/.lang-en su <html> decide quale mostrare. */
     html.lang-en .i18n-it,
     html.lang-it .i18n-en { display: none !important; }
-    /* Mostra la lingua attiva */
     html.lang-it .i18n-it { display: inline; }
     html.lang-en .i18n-en { display: inline; }
-    /* Varianti a blocco (vanno a capo) */
     html.lang-it .i18n-it.is-block { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(0.95rem, 1.6vw, 1.15rem);font-style: normal; letter-spacing: -0.01em; line-height: 1.3; color: #1a1917;}
     html.lang-en .i18n-en.is-block { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(0.95rem, 1.6vw, 1.15rem);font-style: normal; letter-spacing: -0.01em; line-height: 1.3; color: #1a1917;}
-    /* Fallback prima che parta il JS: mostra solo l'italiano, mai entrambe */
     html:not(.lang-it):not(.lang-en) .i18n-en { display: none !important; }
     html:not(.lang-it):not(.lang-en) .i18n-it { display: inline; }
     html:not(.lang-it):not(.lang-en) .i18n-it.is-block { display: block; }
@@ -161,7 +151,6 @@
         max-width: 150px;
         height: auto;
         display: block;
-        /* logo PNG trasparente: nessun blend necessario */
     }
     .header-actions {
         display: flex;
@@ -183,7 +172,6 @@
     }
     .btn-header-quick:hover { opacity: 0.55; }
 
-    /* Selettore lingua IT / EN */
     .lang-switch {
         display: inline-flex;
         align-items: center;
@@ -225,7 +213,6 @@
         .lang-switch button { padding: 7px 10px; }
     }
     @media (max-width: 460px) {
-        /* Su schermi molto stretti nascondi il testo lungo, tieni logo + lingua */
         .btn-header-quick { display: none; }
     }
 
@@ -246,9 +233,6 @@
         z-index: 0;
         filter: grayscale(0.35) brightness(1.02) contrast(0.98);
     }
-    /* Velo avorio: riporta il video alla palette + garantisce leggibilità del testo.
-       Strato 1 (radiale, basso-sx): pannello morbido dietro titolo e sottotitoli.
-       Strato 2 (verticale): stacco leggero in alto e chiusura in basso verso il manifesto. */
     .hero::before {
         content: "";
         position: absolute;
@@ -281,7 +265,6 @@
         letter-spacing: -0.03em;
         margin: 0.32em 0 0;
         color: var(--ink);
-        /* Alone avorio impercettibile: stacca le lettere da qualsiasi frame del video */
         text-shadow: 0 1px 24px rgba(242,239,233,0.9), 0 0 2px rgba(242,239,233,0.8);
         opacity: 0;
         animation: rise 1.1s ease-out forwards;
@@ -297,7 +280,6 @@
         max-width: 30ch;
         text-shadow: 0 1px 16px rgba(242,239,233,0.92);
     }
-    /* La variante di lingua inline nel titolo resta a livello di blocco */
     .hero__title span.i18n-it, .hero__title span.i18n-en { display: none; }
     html.lang-it .hero__title span.i18n-it { display: block; }
     html.lang-en .hero__title span.i18n-en { display: block; }
@@ -326,7 +308,6 @@
         animation-delay: 1.05s;
     }
 
-    /* Riga inferiore Hero: sottotitolo + indice */
     .hero__foot {
         position: relative;
         z-index: 2;
@@ -386,6 +367,8 @@
         grid-template-columns: repeat(4, 1fr);
     }
     .manifesto__item {
+        display: flex;
+        flex-direction: column;
         padding: clamp(34px, 5vw, 64px) clamp(20px, 2.4vw, 40px);
         border-left: 1px solid var(--line);
     }
@@ -411,8 +394,56 @@
     .manifesto__body { font-size: 0.86rem; color: var(--ink-soft); line-height: 1.65; }
     .manifesto__body em { color: var(--ink-mute); font-style: italic; }
 
+    /* Voci di dettaglio: stesso linguaggio a hairline delle certificazioni */
+    .facts {
+        list-style: none;
+        margin-top: 22px;
+        display: flex;
+        flex-direction: column;
+    }
+    .facts li {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        align-items: baseline;
+        padding: 9px 0;
+        border-top: 1px solid var(--line-soft);
+    }
+    .facts li:last-child { border-bottom: 1px solid var(--line-soft); }
+    .facts__k {
+        font-family: var(--body);
+        font-size: 0.7rem;
+        color: var(--ink-mute);
+        line-height: 1.4;
+    }
+    .facts__v {
+        font-family: var(--display);
+        font-size: 0.78rem;
+        letter-spacing: 0.01em;
+        color: var(--ink);
+        line-height: 1.4;
+        text-align: right;
+    }
+
+    /* Nota a piè di colonna: spinta in fondo così le 4 colonne chiudono allineate */
+    .manifesto__note {
+        margin-top: auto;
+        padding-top: 22px;
+        font-size: 0.74rem;
+        font-style: italic;
+        color: var(--ink-mute);
+        line-height: 1.55;
+    }
+    .manifesto__note a {
+        font-style: normal;
+        color: var(--ink);
+        text-decoration: none;
+        border-bottom: 1px solid var(--line);
+        transition: border-color 0.3s ease;
+    }
+    .manifesto__note a:hover { border-color: var(--ink); }
+
     .cert-line {
-        margin-top: 16px;
+        margin-top: 22px;
         display: flex;
         flex-direction: column;
         gap: 7px;
@@ -430,7 +461,7 @@
     }
     .cert-item span { color: var(--ink-mute); font-family: var(--body); font-size: 0.68rem; letter-spacing: 0; }
     .cert-item img{ height: 18px; margin-left: auto;}
-    
+
     @media (max-width: 960px) {
         .manifesto__grid { grid-template-columns: repeat(2, 1fr); }
         .manifesto__item:nth-child(3) { border-left: none; }
@@ -493,7 +524,6 @@
         align-items: start;
     }
 
-    /* Immagine — cornice essenziale, hover discreto */
     .frame { margin: 0; }
     .frame__img {
         position: relative;
@@ -524,7 +554,6 @@
         color: var(--ink-mute);
     }
 
-    /* Specifiche — tabella capitolato, niente pallini */
     .spec__title {
         font-family: var(--display);
         font-weight: 500;
@@ -556,7 +585,6 @@
     .accessories { margin-top: 40px; }
     .accessories p { font-size: 0.9rem; color: var(--ink-soft); }
 
-    /* Disegno tecnico */
     .drawing {
         margin-top: clamp(40px, 5vw, 70px);
         padding-top: clamp(34px, 4vw, 54px);
@@ -613,10 +641,8 @@
         line-height: 0.9;
         color: var(--ink);
     }
-    /* Gli span di lingua nel titolo NON hanno dimensione propria: ereditano dall'h2 (grande). */
     .resources__title > .i18n-it,
     .resources__title > .i18n-en { font-size: inherit; letter-spacing: inherit; line-height: inherit; }
-    /* Solo il sottotitolo dedicato è piccolo e in corsivo. */
     .resources__title-sub {
         display: block;
         font-family: var(--body);
@@ -670,45 +696,207 @@
         .dl + .dl { border-left: none; }
     }
 
-    /* ======================= MODAL ======================= */
+    /* ======================= MODAL / LIGHTBOX ======================= */
+    /* L'immagine "cresce" dalla miniatura cliccata; dentro al lightbox
+       un clic ingrandisce nel punto scelto, poi si trascina per esplorarla.
+       Rotella del mouse e pinch (due dita) regolano lo zoom. */
     .modal {
-        display: none;
         position: fixed;
         inset: 0;
         z-index: 1000;
-        padding: 64px 20px 24px;
-        overflow: auto;
-        background: rgba(26, 25, 23, 0.9);
+        display: none;
+        background: rgba(26, 25, 23, 0);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        transition: background 0.45s ease, backdrop-filter 0.45s ease, -webkit-backdrop-filter 0.45s ease;
+    }
+    .modal.is-mounted { display: block; }
+    .modal.is-open {
+        background: rgba(26, 25, 23, 0.92);
         backdrop-filter: blur(6px);
         -webkit-backdrop-filter: blur(6px);
-        animation: fade 0.3s ease;
     }
-    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    .modal__stage {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 72px 20px 64px;
+        overflow: hidden;
+        touch-action: none;
+    }
+    .modal__frame {
+        transform-origin: 0 0;
+        will-change: transform;
+    }
+    .modal__frame.is-animating { transition: transform 0.55s cubic-bezier(.16,.8,.2,1); }
     .modal img {
         display: block;
-        margin: auto;
-        max-width: 94%;
-        max-height: 84vh;
-        background: #fff;
-        padding: 12px;
-        border: 1px solid rgba(255,255,255,0.15);
+        max-width: calc(100vw - 40px);
+        max-height: calc(100vh - 136px);
+        width: auto;
+        height: auto;
+        user-select: none;
+        -webkit-user-drag: none;
+        cursor: zoom-in;
+        transform-origin: center center;
+        transition: transform 0.45s cubic-bezier(.16,.8,.2,1);
+        will-change: transform;
     }
+    .modal img.is-drawing { background: #fff; padding: 12px; }
+    .modal img.is-zoomed { cursor: grab; }
+    .modal img.is-dragging { cursor: grabbing; transition: none; }
+
+    .modal__hint {
+        position: absolute;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        font-family: var(--display);
+        font-size: 0.64rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(242,239,233,0.55);
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.4s ease 0.25s;
+    }
+    .modal.is-open .modal__hint { opacity: 1; }
+
+    .modal__zoom {
+        position: absolute;
+        top: 22px;
+        left: 22px;
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(242,239,233,0.3);
+        border-radius: 999px;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 0.4s ease 0.2s;
+        z-index: 2;
+    }
+    .modal.is-open .modal__zoom { opacity: 1; }
+    .modal__zoom button {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        color: var(--paper);
+        width: 42px;
+        height: 42px;
+        font-family: var(--display);
+        font-size: 18px;
+        font-weight: 300;
+        cursor: pointer;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+    .modal__zoom button + button { border-left: 1px solid rgba(242,239,233,0.3); }
+    .modal__zoom button:hover { background: var(--paper); color: var(--ink); }
+    .modal__zoom output {
+        min-width: 58px;
+        text-align: center;
+        font-family: var(--display);
+        font-size: 0.66rem;
+        letter-spacing: 0.12em;
+        color: rgba(242,239,233,0.75);
+        border-left: 1px solid rgba(242,239,233,0.3);
+        line-height: 42px;
+    }
+
     .close-modal {
-        position: fixed;
+        position: absolute;
         top: 22px; right: 22px;
         width: 44px; height: 44px;
-        line-height: 42px;
-        text-align: center;
+        padding: 0;
+        appearance: none;
+        background: transparent;
         color: var(--paper);
         font-family: var(--display);
         font-size: 22px;
+        font-weight: 300;
+        line-height: 1;
         cursor: pointer;
-        z-index: 1001;
+        z-index: 2;
         border: 1px solid rgba(242,239,233,0.4);
         border-radius: 50%;
-        transition: background 0.3s ease, color 0.3s ease;
+        opacity: 0;
+        transition: opacity 0.4s ease 0.2s, background 0.3s ease, color 0.3s ease;
     }
+    .modal.is-open .close-modal { opacity: 1; }
     .close-modal:hover { background: var(--paper); color: var(--ink); }
+    .modal button:focus-visible { outline: 1px solid var(--paper); outline-offset: 3px; }
+
+    .frame__img:focus-visible, .drawing__img:focus-visible { outline: 1px solid var(--ink); outline-offset: 4px; }
+
+    @media (max-width: 560px) {
+        .modal__hint { font-size: 0.56rem; letter-spacing: 0.12em; }
+        .modal__zoom output { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .modal, .modal__frame.is-animating, .modal img { transition: none !important; }
+    }
+
+    /* ======================= TORNA SU ======================= */
+    /* Pulsante circolare a destra: compare solo avvicinandosi al fondo pagina.
+       L'anello sottile si "chiude" man mano che si scorre. */
+    .to-top {
+        position: fixed;
+        right: clamp(16px, 3vw, 36px);
+        bottom: clamp(16px, 3vw, 36px);
+        z-index: 900;
+        width: 54px;
+        height: 54px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(242, 239, 233, 0.9);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: var(--ink);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 10px 30px -12px rgba(26, 25, 23, 0.45);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(14px);
+        transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.16,.8,.2,1), visibility 0s linear 0.5s, background 0.35s ease, color 0.35s ease;
+    }
+    .to-top.is-visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.16,.8,.2,1), visibility 0s, background 0.35s ease, color 0.35s ease;
+    }
+    .to-top__ring {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+        pointer-events: none;
+    }
+    .to-top__ring circle { fill: none; stroke-width: 1; }
+    .to-top__track { stroke: var(--line); }
+    .to-top__progress {
+        stroke: currentColor;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.15s linear;
+    }
+    .to-top__arrow {
+        position: relative;
+        width: 16px;
+        height: 16px;
+        transition: transform 0.45s cubic-bezier(.16,.8,.2,1);
+    }
+    .to-top:hover { background: var(--ink); color: var(--paper); }
+    .to-top:hover .to-top__track { stroke: rgba(242,239,233,0.25); }
+    .to-top:hover .to-top__arrow { transform: translateY(-3px); }
+    .to-top:focus-visible { outline: 1px solid var(--ink); outline-offset: 4px; }
+    @media (prefers-reduced-motion: reduce) {
+        .to-top, .to-top.is-visible, .to-top__arrow { transition: opacity 0.2s ease, visibility 0s; transform: none; }
+    }
 
     /* ======================= FOOTER ======================= */
     footer {
@@ -747,7 +935,7 @@
     @media (max-width: 680px) { .footer-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
-<body>
+<body id="top">
 
     <!-- ======================= HEADER ======================= -->
     <header>
@@ -779,8 +967,6 @@
             </p>
             <h1 class="hero__title">
                 Love Your Dream
-                <span class="i18n-it">Il cuore tecnologico della tua cucina, disegnato attorno a un gesto quotidiano.</span>
-                <span class="i18n-en">The technological heart of your kitchen, designed around an everyday gesture.</span>
             </h1>
             <p class="hero__quote">Every great kitchen starts with a dream</p>
             <p class="hero__subquote">
@@ -805,14 +991,40 @@
     <section class="manifesto">
         <div class="shell">
             <div class="manifesto__grid">
+
+                <!-- I — Italian Engineering -->
                 <div class="manifesto__item">
                     <span class="manifesto__num">I</span>
                     <h2 class="manifesto__head">Italian Engineering</h2>
                     <p class="manifesto__body">
-                        <span class="i18n-it">Progettazione e sviluppo in Italia</span>
-                        <span class="i18n-en">Designed &amp; engineered in Italy</span>
+                        <span class="i18n-it">Progettazione italiana<br>Sviluppato in Italia<br>Esclusivamente Cuore Italiano</span>
+                        <span class="i18n-en">Italian design<br>Developed in Italy<br>A truly Italian heart</span>
+                    </p>
+                    <ul class="facts">
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Progetto</span><span class="i18n-en">Design</span></span>
+                            <span class="facts__v">Italia</span>
+                        </li>
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Sviluppo</span><span class="i18n-en">Development</span></span>
+                            <span class="facts__v">Italia</span>
+                        </li>
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Distribuzione UE</span><span class="i18n-en">EU distribution</span></span>
+                            <span class="facts__v">Decox S.p.A.</span>
+                        </li>
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Sede</span><span class="i18n-en">Based in</span></span>
+                            <span class="facts__v">Cinisello Balsamo (MI)</span>
+                        </li>
+                    </ul>
+                    <p class="manifesto__note">
+                        <span class="i18n-it">Materiale tecnico, video e benchmark nella <a href="#presentazione-download">sezione download</a>.</span>
+                        <span class="i18n-en">Technical material, video and benchmark in the <a href="#presentazione-download">download section</a>.</span>
                     </p>
                 </div>
+
+                <!-- II — Premium Materials -->
                 <div class="manifesto__item">
                     <span class="manifesto__num">II</span>
                     <h2 class="manifesto__head">Premium Materials</h2>
@@ -820,21 +1032,55 @@
                         <span class="i18n-it">Acciaio inox 304, finitura PVD Black</span>
                         <span class="i18n-en">304 Stainless Steel, PVD Black finish</span>
                     </p>
+                    <ul class="facts">
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Struttura</span><span class="i18n-en">Body</span></span>
+                            <span class="facts__v"><span class="i18n-it">Acciaio INOX 304</span><span class="i18n-en">304 stainless steel</span></span>
+                        </li>
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Finitura</span><span class="i18n-en">Finish</span></span>
+                            <span class="facts__v">PVD Black</span>
+                        </li>
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Superficie</span><span class="i18n-en">Surface</span></span>
+                            <span class="facts__v"><span class="i18n-it">Texture Honeycomb</span><span class="i18n-en">Honeycomb texture</span></span>
+                        </li>
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Rubinetto LYD9000</span><span class="i18n-en">LYD9000 faucet</span></span>
+                            <span class="facts__v"><span class="i18n-it">GunGrey, vetro nero</span><span class="i18n-en">GunGrey, black glass</span></span>
+                        </li>
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Taglieri</span><span class="i18n-en">Cutting boards</span></span>
+                            <span class="facts__v"><span class="i18n-it">Inox satinato e bambù</span><span class="i18n-en">Satin steel and bamboo</span></span>
+                        </li>
+                    </ul>
+                    <p class="manifesto__note">
+                        <span class="i18n-it">Materiali pensati per durare e per restare belli nell'uso quotidiano.</span>
+                        <span class="i18n-en">Materials chosen to last and to stay beautiful in daily use.</span>
+                    </p>
                 </div>
+
+                <!-- III — Certified Safety -->
                 <div class="manifesto__item">
                     <span class="manifesto__num">III</span>
                     <h2 class="manifesto__head">Certified Safety</h2>
                     <p class="manifesto__body">
-                        <span class="i18n-it">Il massimo delle certificazioni</span>
-                        <span class="i18n-en">The highest standard of certifications</span>
+                        <span class="i18n-it">Il massimo delle certificazioni per il contatto con acqua potabile e alimenti.</span>
+                        <span class="i18n-en">The highest standard of certifications for contact with drinking water and food.</span>
                     </p>
                     <div class="cert-line">
-                        <div class="cert-item">KTW-BWGL <span>Germany</span><img src="assets/logos/ktw.jpg"></div>
-                        <div class="cert-item">MOCA <span>Italy</span><img src="assets/logos/moca.svg"></div>
-                        <div class="cert-item">LFGB <span>Germany + EU</span><img src="assets/logos/LFGB.png"></div>
-                        <div class="cert-item">CE <span>EU</span><img src="assets/logos/ce.svg"></div>
+                        <div class="cert-item">KTW-BWGL <span>Germany</span><img src="assets/logos/ktw.jpg" alt=""></div>
+                        <div class="cert-item">MOCA <span>Italy</span><img src="assets/logos/moca.svg" alt=""></div>
+                        <div class="cert-item">LFGB <span>Germany + EU</span><img src="assets/logos/LFGB.png" alt=""></div>
+                        <div class="cert-item">CE <span>EU</span><img src="assets/logos/ce.svg" alt=""></div>
                     </div>
+                    <p class="manifesto__note">
+                        <span class="i18n-it">Valide per entrambi i modelli, LYD9009 e LYD9000.</span>
+                        <span class="i18n-en">Valid for both models, LYD9009 and LYD9000.</span>
+                    </p>
                 </div>
+
+                <!-- IV — Designed for Everyday Use -->
                 <div class="manifesto__item">
                     <span class="manifesto__num">IV</span>
                     <h2 class="manifesto__head">Designed for Everyday Use</h2>
@@ -842,7 +1088,34 @@
                         <span class="i18n-it">Tecnologia e praticità per la cucina moderna</span>
                         <span class="i18n-en">Technology &amp; practicality for modern kitchens</span>
                     </p>
+                    <ul class="facts">
+                        <li>
+                            <span class="facts__k">Workstation</span>
+                            <span class="facts__v"><span class="i18n-it">3 livelli integrati</span><span class="i18n-en">3 integrated levels</span></span>
+                        </li>
+                        <li>
+                            <span class="facts__k">Display</span>
+                            <span class="facts__v"><span class="i18n-it">Temperatura e timer</span><span class="i18n-en">Temperature and timer</span></span>
+                        </li>
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Alimentazione</span><span class="i18n-en">Power</span></span>
+                            <span class="facts__v"><span class="i18n-it">Idroelettrica, zero batterie</span><span class="i18n-en">Hydroelectric, no batteries</span></span>
+                        </li>
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Erogazioni</span><span class="i18n-en">Water outlets</span></span>
+                            <span class="facts__v"><span class="i18n-it">Rain, doccia a 3 getti</span><span class="i18n-en">Rain, 3-spray pull-out</span></span>
+                        </li>
+                        <li>
+                            <span class="facts__k"><span class="i18n-it">Installazione</span><span class="i18n-en">Installation</span></span>
+                            <span class="facts__v"><span class="i18n-it">Sopratop, base 90 cm</span><span class="i18n-en">Topmount, 90 cm cabinet</span></span>
+                        </li>
+                    </ul>
+                    <p class="manifesto__note">
+                        <span class="i18n-it">Su LYD9009 anche Cup Washer, Waterfall, dispenser sapone e comando scarico remoto.</span>
+                        <span class="i18n-en">LYD9009 adds Cup Washer, Waterfall, soap dispenser and remote drain control.</span>
+                    </p>
                 </div>
+
             </div>
         </div>
     </section>
@@ -870,7 +1143,7 @@
 
             <div class="product__layout">
                 <figure class="frame">
-                    <div class="frame__img" onclick="openModal(this.querySelector('img').src, 'Sink Multifunzionale LYD9009')">
+                    <div class="frame__img" onclick="openModal(this.querySelector('img').src, 'Sink Multifunzionale LYD9009', this)">
                         <img src="assets/LYD%209009%20AMB.jpg" alt="Vasca multifunzionale Love Your Dream LYD9009 ambientata">
                     </div>
                     <figcaption class="frame__cap">
@@ -984,7 +1257,7 @@
                         <span class="i18n-en">Dimensions and clearances for installation. Click to enlarge.</span>
                     </p>
                 </div>
-                <div class="drawing__img" onclick="openModal(this.querySelector('img').src, 'Disegno Tecnico LYD9009')">
+                <div class="drawing__img" onclick="openModal(this.querySelector('img').src, 'Disegno Tecnico LYD9009', this)">
                     <img src="assets/LYD_9009.png" alt="Disegno tecnico vasca multifunzione LYD9009">
                 </div>
             </div>
@@ -1014,7 +1287,7 @@
 
             <div class="product__layout">
                 <figure class="frame">
-                    <div class="frame__img" onclick="openModal(this.querySelector('img').src, 'Sink Multifunzionale LYD9000')">
+                    <div class="frame__img" onclick="openModal(this.querySelector('img').src, 'Sink Multifunzionale LYD9000', this)">
                         <img src="assets/LYD%209000%20AMB.jpg" alt="Vasca multifunzionale Love Your Dream LYD9000 ambientata">
                     </div>
                     <figcaption class="frame__cap">
@@ -1128,7 +1401,7 @@
                         <span class="i18n-en">Dimensions and clearances for installation. Click to enlarge.</span>
                     </p>
                 </div>
-                <div class="drawing__img" onclick="openModal(this.querySelector('img').src, 'Disegno Tecnico LYD9000')">
+                <div class="drawing__img" onclick="openModal(this.querySelector('img').src, 'Disegno Tecnico LYD9000', this)">
                     <img src="assets/LYD_9000.png" alt="Disegno tecnico vasca multifunzione LYD9000">
                 </div>
             </div>
@@ -1150,7 +1423,6 @@
             </div>
 
             <div class="film">
-                <!-- L'src viene impostato da JS in base alla lingua (id video IT/EN) -->
                 <iframe id="presentation-video" src="" data-video-it="BP49pd8HVwg" data-video-en="WC2P7-I9xJ4" title="Love Your Dream Presentation Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
 
@@ -1181,10 +1453,23 @@
         </div>
     </section>
 
-    <!-- ======================= MODAL ======================= -->
-    <div id="imageModal" class="modal" onclick="closeModal()">
-        <span class="close-modal" onclick="closeModal()">×</span>
-        <img id="imgModalTarget" alt="Ingrandimento prodotto">
+    <!-- ======================= MODAL / LIGHTBOX ======================= -->
+    <div id="imageModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal__zoom">
+            <button type="button" id="zoomOut" aria-label="Riduci / Zoom out">−</button>
+            <output id="zoomLevel">100%</output>
+            <button type="button" id="zoomIn" aria-label="Ingrandisci / Zoom in">+</button>
+        </div>
+        <button type="button" class="close-modal" id="closeModal" aria-label="Chiudi / Close">×</button>
+        <div class="modal__stage" id="modalStage">
+            <div class="modal__frame" id="modalFrame">
+                <img id="imgModalTarget" alt="Ingrandimento prodotto" draggable="false">
+            </div>
+        </div>
+        <p class="modal__hint">
+            <span class="i18n-it">Clicca sull'immagine per ingrandire · Trascina per spostarti · Esc per chiudere</span>
+            <span class="i18n-en">Click the image to zoom · Drag to move around · Esc to close</span>
+        </p>
     </div>
 
     <!-- ======================= FOOTER ======================= -->
@@ -1223,6 +1508,18 @@
         </div>
     </footer>
 
+    <!-- ======================= TORNA SU ======================= -->
+    <button type="button" class="to-top" id="toTop" aria-label="Torna su" title="Torna su">
+        <svg class="to-top__ring" viewBox="0 0 54 54" aria-hidden="true">
+            <circle class="to-top__track" cx="27" cy="27" r="26"></circle>
+            <circle class="to-top__progress" id="toTopProgress" cx="27" cy="27" r="26"></circle>
+        </svg>
+        <svg class="to-top__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 14V2.5"></path>
+            <path d="M3.5 7L8 2.5L12.5 7"></path>
+        </svg>
+    </button>
+
     <!-- ======================= SCRIPT ======================= -->
     <script>
         /* ---------- Lingua ---------- */
@@ -1235,7 +1532,6 @@
             var id = (lang === "en") ? iframe.getAttribute("data-video-en")
                                      : iframe.getAttribute("data-video-it");
             var wanted = VIDEO_BASE + id + VIDEO_PARAMS;
-            // Reimposta solo se cambia, così non ricarica inutilmente il player
             if (iframe.getAttribute("src") !== wanted) iframe.setAttribute("src", wanted);
         }
 
@@ -1245,6 +1541,14 @@
             var href = (lang === "en") ? link.getAttribute("data-pdf-en")
                                        : link.getAttribute("data-pdf-it");
             if (href) link.setAttribute("href", href);
+        }
+
+        function applyToTopLabel(lang) {
+            var btn = document.getElementById("toTop");
+            if (!btn) return;
+            var label = (lang === "en") ? "Back to top" : "Torna su";
+            btn.setAttribute("aria-label", label);
+            btn.setAttribute("title", label);
         }
 
         function setLang(lang) {
@@ -1261,11 +1565,11 @@
 
             applyVideo(lang);
             applyCatalog(lang);
+            applyToTopLabel(lang);
 
             try { localStorage.setItem("lyd-lang", lang); } catch (e) {}
         }
 
-        /* Scelta iniziale: 1) preferenza salvata  2) lingua del browser  3) italiano */
         (function initLang() {
             var saved = null;
             try { saved = localStorage.getItem("lyd-lang"); } catch (e) {}
@@ -1277,22 +1581,272 @@
             setLang(lang);
         })();
 
-        /* ---------- Modal immagini ---------- */
-        function openModal(imageSrc, altText) {
-            var modal = document.getElementById("imageModal");
-            var modalImg = document.getElementById("imgModalTarget");
-            modal.style.display = "block";
-            modalImg.src = imageSrc;
-            modalImg.alt = altText;
-            document.body.style.overflow = "hidden";
-        }
-        function closeModal() {
-            document.getElementById("imageModal").style.display = "none";
-            document.body.style.overflow = "";
-        }
-        document.addEventListener("keydown", function (e) {
-            if (e.key === "Escape") closeModal();
-        });
+        /* ---------- Lightbox con zoom ---------- */
+        var LB = (function () {
+            var modal  = document.getElementById("imageModal");
+            var stage  = document.getElementById("modalStage");
+            var frame  = document.getElementById("modalFrame");
+            var img    = document.getElementById("imgModalTarget");
+            var level  = document.getElementById("zoomLevel");
+            var MIN = 1, MAX = 5, STEP_ZOOM = 2.5;
+            var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+            var s = 1, tx = 0, ty = 0;        // stato dello zoom
+            var source = null;                // miniatura di partenza
+            var open = false;
+            var pointers = {};                // puntatori attivi (mouse / dita)
+            var drag = null;                  // stato trascinamento / pinch
+            var lastFocus = null;
+
+            function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+            /* Limita lo spostamento perché l'immagine non esca dallo schermo */
+            function bound() {
+                var w = img.offsetWidth * s, h = img.offsetHeight * s;
+                var W = stage.clientWidth, H = stage.clientHeight;
+                var mx = Math.max(0, (w - W) / 2 + 20);
+                var my = Math.max(0, (h - H) / 2 + 20);
+                tx = clamp(tx, -mx, mx);
+                ty = clamp(ty, -my, my);
+            }
+
+            function render() {
+                if (s <= MIN + 0.001) { s = MIN; tx = 0; ty = 0; }
+                bound();
+                img.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + s + ")";
+                img.classList.toggle("is-zoomed", s > MIN);
+                level.textContent = Math.round(s * 100) + "%";
+            }
+
+            /* Coordinate del punto rispetto al centro dell'immagine a riposo */
+            function local(clientX, clientY) {
+                var r = stage.getBoundingClientRect();
+                return { x: clientX - (r.left + r.width / 2), y: clientY - (r.top + r.height / 2) };
+            }
+
+            /* Zoom mantenendo fermo il punto sotto al cursore */
+            function zoomTo(next, px, py) {
+                next = clamp(next, MIN, MAX);
+                var k = next / s;
+                tx = px - (px - tx) * k;
+                ty = py - (py - ty) * k;
+                s = next;
+                render();
+            }
+
+            /* Animazione "cresce dalla miniatura" (tecnica FLIP) */
+            function flipFrom(el, reverse, done) {
+                if (!el || reduce.matches) { if (done) done(); return; }
+                var from = el.getBoundingClientRect();
+                var to = img.getBoundingClientRect();
+                if (!to.width || !from.width) { if (done) done(); return; }
+                var k = Math.min(from.width / to.width, from.height / to.height);
+                var dx = from.left + (from.width - to.width * k) / 2 - to.left;
+                var dy = from.top + (from.height - to.height * k) / 2 - to.top;
+                var t = "translate(" + dx + "px," + dy + "px) scale(" + k + ")";
+                // trasformazione relativa all'angolo in alto a sinistra del frame
+                var off = frame.getBoundingClientRect();
+                var ox = to.left - off.left, oy = to.top - off.top;
+                frame.style.transformOrigin = ox + "px " + oy + "px";
+
+                frame.classList.remove("is-animating");
+                frame.style.transform = reverse ? "none" : t;
+                void frame.offsetWidth;
+                frame.classList.add("is-animating");
+                frame.style.transform = reverse ? t : "none";
+                var finished = false;
+                function end() {
+                    if (finished) return; finished = true;
+                    frame.classList.remove("is-animating");
+                    frame.removeEventListener("transitionend", end);
+                    if (done) done();
+                }
+                frame.addEventListener("transitionend", end);
+                setTimeout(end, 650);
+            }
+
+            function show(src, alt, el) {
+                source = el ? (el.querySelector("img") || el) : null;
+                lastFocus = document.activeElement;
+                s = 1; tx = 0; ty = 0; render();
+                img.classList.toggle("is-drawing", !!(el && el.classList.contains("drawing__img")));
+                img.alt = alt || "";
+                frame.style.transform = "none";
+                frame.style.visibility = "hidden";
+                modal.classList.add("is-mounted");
+                modal.setAttribute("aria-hidden", "false");
+                document.body.style.overflow = "hidden";
+                open = true;
+
+                function start() {
+                    frame.style.visibility = "";
+                    requestAnimationFrame(function () { modal.classList.add("is-open"); });
+                    flipFrom(source, false);
+                    document.getElementById("closeModal").focus({ preventScroll: true });
+                }
+                img.onload = null;
+                if (img.getAttribute("src") === src && img.complete) { start(); }
+                else { img.onload = start; img.src = src; }
+            }
+
+            function hide() {
+                if (!open) return;
+                open = false;
+                modal.classList.remove("is-open");
+                // riporta lo zoom a riposo prima di "rientrare" nella miniatura
+                s = 1; tx = 0; ty = 0;
+                img.classList.add("is-dragging");   // niente transizione su questo reset
+                render();
+                void img.offsetWidth;
+                img.classList.remove("is-dragging");
+                flipFrom(source, true, function () {
+                    modal.classList.remove("is-mounted");
+                    modal.setAttribute("aria-hidden", "true");
+                    frame.style.transform = "none";
+                    document.body.style.overflow = "";
+                    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+                });
+            }
+
+            /* ----- Puntatori: clic, trascinamento, pinch ----- */
+            img.addEventListener("pointerdown", function (e) {
+                e.preventDefault();
+                img.setPointerCapture(e.pointerId);
+                pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+                var ids = Object.keys(pointers);
+                if (ids.length === 1) {
+                    drag = { mode: "pan", sx: e.clientX, sy: e.clientY, tx: tx, ty: ty, moved: false };
+                } else if (ids.length === 2) {
+                    var a = pointers[ids[0]], b = pointers[ids[1]];
+                    var mid = local((a.x + b.x) / 2, (a.y + b.y) / 2);
+                    drag = { mode: "pinch", dist: Math.hypot(a.x - b.x, a.y - b.y), s: s, tx: tx, ty: ty, mid: mid, moved: true };
+                }
+                img.classList.add("is-dragging");
+            });
+
+            img.addEventListener("pointermove", function (e) {
+                if (!pointers[e.pointerId] || !drag) return;
+                pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+                if (drag.mode === "pan") {
+                    var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+                    if (Math.abs(dx) + Math.abs(dy) > 5) drag.moved = true;
+                    if (s > MIN) { tx = drag.tx + dx; ty = drag.ty + dy; render(); }
+                } else {
+                    var ids = Object.keys(pointers);
+                    if (ids.length < 2) return;
+                    var a = pointers[ids[0]], b = pointers[ids[1]];
+                    var next = clamp(drag.s * Math.hypot(a.x - b.x, a.y - b.y) / drag.dist, MIN, MAX);
+                    var k = next / drag.s;
+                    s = next;
+                    tx = drag.mid.x - (drag.mid.x - drag.tx) * k;
+                    ty = drag.mid.y - (drag.mid.y - drag.ty) * k;
+                    render();
+                }
+            });
+
+            function release(e) {
+                if (!pointers[e.pointerId]) return;
+                delete pointers[e.pointerId];
+                var wasTap = drag && drag.mode === "pan" && !drag.moved;
+                if (Object.keys(pointers).length === 0) {
+                    img.classList.remove("is-dragging");
+                    if (wasTap && e.type === "pointerup") {
+                        var p = local(e.clientX, e.clientY);
+                        if (s > MIN) zoomTo(MIN, p.x, p.y);
+                        else zoomTo(STEP_ZOOM, p.x, p.y);
+                    }
+                    drag = null;
+                } else {
+                    // resta un dito: riprendi il trascinamento da lì
+                    var id = Object.keys(pointers)[0];
+                    drag = { mode: "pan", sx: pointers[id].x, sy: pointers[id].y, tx: tx, ty: ty, moved: true };
+                }
+            }
+            img.addEventListener("pointerup", release);
+            img.addEventListener("pointercancel", release);
+
+            /* Doppio tap/clic non deve selezionare nulla */
+            img.addEventListener("dblclick", function (e) { e.preventDefault(); });
+
+            /* Rotella del mouse / trackpad */
+            stage.addEventListener("wheel", function (e) {
+                if (!open) return;
+                e.preventDefault();
+                var p = local(e.clientX, e.clientY);
+                img.classList.add("is-dragging");
+                zoomTo(s * Math.exp(-e.deltaY * 0.0022), p.x, p.y);
+                clearTimeout(stage._wt);
+                stage._wt = setTimeout(function () { img.classList.remove("is-dragging"); }, 120);
+            }, { passive: false });
+
+            /* Clic sullo sfondo: chiude */
+            stage.addEventListener("click", function (e) { if (e.target === stage || e.target === frame) hide(); });
+
+            document.getElementById("closeModal").addEventListener("click", hide);
+            document.getElementById("zoomIn").addEventListener("click", function () { zoomTo(s * 1.5, 0, 0); });
+            document.getElementById("zoomOut").addEventListener("click", function () { zoomTo(s / 1.5, 0, 0); });
+
+            document.addEventListener("keydown", function (e) {
+                if (!open) return;
+                if (e.key === "Escape") hide();
+                else if (e.key === "+" || e.key === "=") zoomTo(s * 1.5, 0, 0);
+                else if (e.key === "-") zoomTo(s / 1.5, 0, 0);
+                else if (e.key === "0") zoomTo(MIN, 0, 0);
+            });
+
+            window.addEventListener("resize", function () { if (open) render(); });
+
+            /* Miniature raggiungibili anche da tastiera */
+            document.querySelectorAll(".frame__img, .drawing__img").forEach(function (el) {
+                el.setAttribute("tabindex", "0");
+                el.setAttribute("role", "button");
+                el.addEventListener("keydown", function (e) {
+                    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); el.click(); }
+                });
+            });
+
+            return { show: show, hide: hide };
+        })();
+
+        /* Nomi mantenuti per compatibilità con gli onclick esistenti */
+        function openModal(imageSrc, altText, el) { LB.show(imageSrc, altText, el); }
+        function closeModal() { LB.hide(); }
+
+        /* ---------- Torna su ---------- */
+        (function initToTop() {
+            var btn = document.getElementById("toTop");
+            var ring = document.getElementById("toTopProgress");
+            if (!btn || !ring) return;
+
+            var C = 2 * Math.PI * 26;              // circonferenza dell'anello
+            ring.style.strokeDasharray = C;
+            ring.style.strokeDashoffset = C;
+
+            var ticking = false;
+            function update() {
+                var doc = document.documentElement;
+                var max = doc.scrollHeight - window.innerHeight;
+                var y = window.scrollY || doc.scrollTop;
+                var progress = max > 0 ? Math.min(y / max, 1) : 0;
+                ring.style.strokeDashoffset = C * (1 - progress);
+
+                // Compare quando mancano meno di ~1 schermata e mezza alla fine
+                var nearBottom = (max - y) < window.innerHeight * 1.5 && y > window.innerHeight;
+                btn.classList.toggle("is-visible", nearBottom);
+                ticking = false;
+            }
+            window.addEventListener("scroll", function () {
+                if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+            }, { passive: true });
+            window.addEventListener("resize", update);
+            update();
+
+            btn.addEventListener("click", function () {
+                var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+                window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+                btn.blur();
+            });
+        })();
     </script>
 
 </body>

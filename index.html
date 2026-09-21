@@ -89,6 +89,11 @@
         /* --- Ritmo --- */
         --gutter: clamp(20px, 5vw, 72px);
         --measure: 1360px;
+
+        /* --- Accento brand: il turchese del logo --- */
+        --brand:      #467392;
+        --brand-deep: #223b4a;   /* variante scura, per gradienti e sfondi */
+        --brand-light:#7ea3bc;   /* variante chiara, per testo su fondo scuro */
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -149,7 +154,7 @@
         justify-content: space-between;
         align-items: center;
         gap: 18px;
-        padding: 20px 0;
+        padding: 20px 10px;
     }
     header img {
         max-width: 150px;
@@ -159,7 +164,7 @@
     .header-actions {
         display: flex;
         align-items: center;
-        gap: 22px;
+        gap: 18px;
     }
     .btn-header-quick {
         font-family: var(--display);
@@ -175,6 +180,7 @@
         transition: opacity 0.3s ease;
     }
     .btn-header-quick:hover { opacity: 0.55; }
+    .btn-header-quick--ghost { color: var(--brand); border-bottom-color: var(--brand); }
 
     .lang-switch {
         display: inline-flex;
@@ -478,6 +484,155 @@
         .manifesto__item:last-child { border-bottom: none; }
     }
 
+    /* ======================= CAROSELLO MODELLI (stile Apple) ======================= */
+    .product-carousel {
+        position: relative;
+        border-bottom: 1px solid var(--line);
+        padding: clamp(60px, 9vw, 128px) 0;
+        overflow: hidden;
+        background:
+            radial-gradient(ellipse 55% 60% at 10% 10%, rgba(70,115,146,0.30) 0%, rgba(70,115,146,0) 68%),
+            radial-gradient(ellipse 50% 55% at 95% 15%, rgba(70,115,146,0.22) 0%, rgba(70,115,146,0) 65%),
+            radial-gradient(ellipse 60% 55% at 50% 105%, rgba(70,115,146,0.24) 0%, rgba(70,115,146,0) 70%);
+    }
+    .pc__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: clamp(30px, 4vw, 52px);
+        position: relative;
+        z-index: 2;
+    }
+    .pc__switch {
+        display: inline-flex;
+        border: 1.5px solid rgba(255,255,255,0.9);
+        border-radius: 999px;
+        overflow: hidden;
+        background: rgba(255,255,255,0.45);
+        backdrop-filter: blur(18px) saturate(180%);
+        -webkit-backdrop-filter: blur(18px) saturate(180%);
+        box-shadow: 0 10px 30px rgba(24,44,56,0.16), inset 0 1px 0 rgba(255,255,255,0.85);
+    }
+    .pc__tab {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        color: var(--ink-soft);
+        font-family: var(--display);
+        font-weight: 500;
+        font-size: 0.76rem;
+        letter-spacing: 0.08em;
+        padding: 11px 20px;
+        cursor: pointer;
+        transition: background 0.35s ease, color 0.35s ease;
+        white-space: nowrap;
+    }
+    .pc__tab small {
+        display: block;
+        font-family: var(--body);
+        font-weight: 300;
+        font-size: 0.68rem;
+        letter-spacing: 0.02em;
+        opacity: 0.75;
+        margin-top: 2px;
+    }
+    .pc__tab + .pc__tab { border-left: 1px solid rgba(255,255,255,0.5); }
+    .pc__tab[aria-pressed="true"] { background: rgba(70,115,146,0.75); backdrop-filter: blur(6px); color: #fff; }
+
+    .pc__viewport { position: relative; z-index: 2; }
+    .pc__mask {
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        border: 1.5px solid rgba(255,255,255,0.9);
+        background: rgba(255,255,255,0.42);
+        backdrop-filter: blur(26px) saturate(180%);
+        -webkit-backdrop-filter: blur(26px) saturate(180%);
+        box-shadow: 0 30px 70px rgba(24,44,56,0.22), 0 2px 0 rgba(255,255,255,0.8) inset, 0 -1px 0 rgba(255,255,255,0.4) inset;
+    }
+    .pc__mask::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background: linear-gradient(120deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0) 55%);
+        mix-blend-mode: screen;
+    }
+    #pcTrack { position: relative; z-index: 1; }
+    .pc__track {
+        display: flex;
+        width: 200%;
+        transition: transform 0.7s cubic-bezier(.19,1,.22,1), height 0.5s ease;
+        will-change: transform;
+    }
+    .pc__slide {
+        width: 50%;
+        flex-shrink: 0;
+        padding: clamp(20px, 3.4vw, 40px);
+        transition: opacity 0.5s ease;
+        box-sizing: border-box;
+    }
+    .pc__track.is-animating .pc__slide[data-idx]:not(.is-active) { opacity: 0.35; }
+
+    .pc__arrow {
+        position: absolute;
+        top: 160px;
+        z-index: 5;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(255,255,255,0.9);
+        background: rgba(255,255,255,0.55);
+        backdrop-filter: blur(14px) saturate(180%);
+        -webkit-backdrop-filter: blur(14px) saturate(180%);
+        box-shadow: 0 12px 28px rgba(24,44,56,0.18), inset 0 1px 0 rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--ink);
+        transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    }
+    .pc__arrow svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .pc__arrow:hover { border-color: var(--brand); color: var(--brand); transform: scale(1.06); }
+    .pc__arrow--prev { left: -34px; }
+    .pc__arrow--next { right: -34px; }
+    @media (max-width: 980px) {
+        .pc__arrow--prev { left: -6px; }
+        .pc__arrow--next { right: -6px; }
+    }
+    @media (max-width: 900px) {
+        .pc__arrow { display: none; }
+    }
+
+    .pc__dots {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: clamp(20px, 3vw, 36px);
+        position: relative;
+        z-index: 2;
+    }
+    .pc__dot {
+        appearance: none;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 1px solid var(--ink-mute);
+        background: transparent;
+        padding: 0;
+        cursor: pointer;
+        transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    }
+    .pc__dot[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); transform: scale(1.2); }
+    @media (prefers-reduced-motion: reduce) {
+        .pc__track { transition: none; }
+        .pc__slide { transition: none; }
+    }
+
     /* ======================= SEZIONE PRODOTTO ======================= */
     .product {
         border-bottom: 1px solid var(--line);
@@ -498,18 +653,18 @@
     .product__ref {
         font-family: var(--display);
         font-weight: 300;
-        font-size: clamp(2.2rem, 6vw, 4.6rem);
-        letter-spacing: -0.03em;
-        line-height: 0.9;
+        font-size: clamp(1.5rem, 2.8vw, 2.3rem);
+        letter-spacing: -0.02em;
+        line-height: 1;
         color: var(--ink);
     }
     .product__ref small {
         display: block;
-        font-size: clamp(0.72rem, 1.4vw, 0.9rem);
+        font-size: clamp(0.68rem, 1.2vw, 0.82rem);
         font-weight: 400;
         letter-spacing: 0.02em;
         color: var(--ink-soft);
-        margin-top: 14px;
+        margin-top: 10px;
     }
     .product__index {
         font-family: var(--display);
@@ -628,6 +783,7 @@
         text-align: left;
         scroll-margin-top: 80px;
     }
+    .resources--alt { background: var(--paper-2); }
     .resources__head {
         display: flex;
         justify-content: space-between;
@@ -671,34 +827,82 @@
     }
     .film iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
-    .downloads { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line); }
+    .downloads {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(14px, 2vw, 20px);
+    }
     .dl {
+        position: relative;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 20px;
-        padding: 30px clamp(16px, 3vw, 34px);
+        flex-direction: column;
+        gap: 22px;
+        padding: clamp(22px, 3vw, 30px);
         text-decoration: none;
         color: var(--ink);
-        border-bottom: 1px solid var(--line);
-        transition: background 0.4s ease, padding-left 0.4s ease;
+        background: rgba(255,255,255,0.55);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
     }
-    .dl + .dl { border-left: 1px solid var(--line); }
-    .dl:hover { background: var(--paper); padding-left: calc(clamp(16px, 3vw, 34px) + 10px); }
+    .dl:hover {
+        border-color: var(--brand);
+        background: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(34,59,74,0.12);
+    }
+    .dl__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .dl__icon {
+        width: 44px; height: 44px;
+        border-radius: 50%;
+        border: 1px solid rgba(70,115,146,0.35);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--brand);
+        flex-shrink: 0;
+        transition: background 0.35s ease, color 0.35s ease;
+    }
+    .dl__icon svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .dl:hover .dl__icon { background: var(--brand); color: #fff; }
+    .dl__format {
+        font-family: var(--display);
+        font-weight: 500;
+        font-size: 0.64rem;
+        letter-spacing: 0.14em;
+        color: var(--ink-mute);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 4px 10px;
+        white-space: nowrap;
+    }
     .dl__label {
         font-family: var(--display);
         font-weight: 400;
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         letter-spacing: -0.01em;
         line-height: 1.3;
     }
-    .dl__label span { display: block; font-family: var(--body); font-size: 0.78rem; font-style: italic; color: var(--ink-mute); margin-top: 4px; }
-    .dl__arrow { font-size: 1.3rem; color: var(--ink-mute); transition: transform 0.4s ease, color 0.4s ease; flex-shrink: 0; }
-    .dl:hover .dl__arrow { transform: translateX(6px); color: var(--ink); }
+    .dl__label span { display: block; font-family: var(--body); font-weight: 300; font-size: 0.82rem; font-style: italic; color: var(--ink-mute); margin-top: 6px; letter-spacing: 0; }
+    .dl__foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+        font-family: var(--display);
+        font-weight: 500;
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-mute);
+    }
+    .dl__arrow { font-size: 1.1rem; color: var(--ink-mute); transition: transform 0.4s ease, color 0.4s ease; flex-shrink: 0; }
+    .dl:hover .dl__foot { color: var(--brand); }
+    .dl:hover .dl__arrow { transform: translateX(6px); color: var(--brand); }
 
-    @media (max-width: 900px) {
+    @media (max-width: 700px) {
         .downloads { grid-template-columns: 1fr; }
-        .dl + .dl { border-left: none; }
     }
 
     /* ======================= MODAL / LIGHTBOX ======================= */
@@ -924,14 +1128,14 @@
     @media (max-width: 820px) { .block__head { grid-template-columns: 1fr; } }
 
     /* ======================= ESPLORA IL SISTEMA ======================= */
-    /* L'unico momento scuro della pagina: richiama la base in vetro nero. */
+    /* L'unico momento a colore della pagina: il turchese richiama il logo. */
     .explorer {
-        background: var(--ink);
+        background: linear-gradient(165deg, var(--brand-deep) 0%, #101b22 62%, #0c1519 100%);
         color: var(--paper);
         padding: clamp(60px, 9vw, 128px) 0;
     }
-    .explorer .block__head { border-color: rgba(242,239,233,0.16); }
-    .explorer .block__lede { color: rgba(242,239,233,0.7); }
+    .explorer .block__head { border-color: rgba(126,163,188,0.28); }
+    .explorer .block__lede { color: rgba(242,239,233,0.75); }
     .explorer__top {
         display: flex;
         justify-content: space-between;
@@ -942,7 +1146,7 @@
     }
     .model-toggle {
         display: inline-flex;
-        border: 1px solid rgba(242,239,233,0.3);
+        border: 1px solid rgba(126,163,188,0.4);
         border-radius: 999px;
         overflow: hidden;
     }
@@ -950,7 +1154,7 @@
         appearance: none;
         border: 0;
         background: transparent;
-        color: rgba(242,239,233,0.6);
+        color: rgba(242,239,233,0.65);
         font-family: var(--display);
         font-weight: 500;
         font-size: 0.74rem;
@@ -959,11 +1163,11 @@
         cursor: pointer;
         transition: background 0.3s ease, color 0.3s ease;
     }
-    .model-toggle button + button { border-left: 1px solid rgba(242,239,233,0.3); }
-    .model-toggle button[aria-pressed="true"] { background: var(--paper); color: var(--ink); }
+    .model-toggle button + button { border-left: 1px solid rgba(126,163,188,0.4); }
+    .model-toggle button[aria-pressed="true"] { background: var(--brand); color: var(--paper); }
     .hint-mob { display: none; }
     @media (max-width: 760px) { .hint-desk { display: none; } .hint-mob { display: inline; } }
-    .explorer__hint { font-size: 0.8rem; color: rgba(242,239,233,0.55); font-style: italic; }
+    .explorer__hint { font-size: 0.8rem; color: var(--brand-light); font-style: italic; }
 
     .bar-scroll { overflow-x: auto; padding-bottom: 6px; }
     .bar-wrap { min-width: 720px; }
@@ -972,8 +1176,8 @@
         gap: 6px;
         padding: 10px;
         width: 100%;
-        background: linear-gradient(180deg, #2a2824 0%, #141311 100%);
-        border: 1px solid rgba(242,239,233,0.14);
+        background: linear-gradient(180deg, #1c333f 0%, #0d1a20 100%);
+        border: 1px solid rgba(126,163,188,0.3);
         border-radius: 4px;
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
         transition: width 0.7s cubic-bezier(.16,.8,.2,1);
@@ -991,7 +1195,7 @@
         gap: 10px;
         padding: 12px 6px;
         background: transparent;
-        border: 1px solid rgba(242,239,233,0.12);
+        border: 1px solid rgba(126,163,188,0.22);
         border-radius: 2px;
         color: rgba(242,239,233,0.62);
         cursor: pointer;
@@ -1005,9 +1209,9 @@
         line-height: 1.25;
         text-align: center;
     }
-    .mod:hover { color: var(--paper); border-color: rgba(242,239,233,0.35); }
-    .mod[aria-pressed="true"] { color: var(--paper); border-color: var(--paper); background: rgba(242,239,233,0.08); }
-    .mod:focus-visible { outline: 1px solid var(--paper); outline-offset: 2px; }
+    .mod:hover { color: var(--paper); border-color: var(--brand-light); }
+    .mod[aria-pressed="true"] { color: var(--paper); border-color: var(--brand-light); background: rgba(70,115,146,0.35); }
+    .mod:focus-visible { outline: 1px solid var(--brand-light); outline-offset: 2px; }
     .bar-scale {
         display: flex;
         align-items: center;
@@ -1016,20 +1220,20 @@
         font-family: var(--display);
         font-size: 0.68rem;
         letter-spacing: 0.1em;
-        color: rgba(242,239,233,0.5);
+        color: var(--brand-light);
         transition: width 0.7s cubic-bezier(.16,.8,.2,1);
         width: 100%;
     }
     .bar-scale.is-short { width: 58%; }
-    .bar-scale::before, .bar-scale::after { content: ""; flex: 1; height: 1px; background: rgba(242,239,233,0.25); }
+    .bar-scale::before, .bar-scale::after { content: ""; flex: 1; height: 1px; background: rgba(126,163,188,0.3); }
 
     .panel {
         display: grid;
-        grid-template-columns: 0.9fr 1.1fr;
-        gap: clamp(20px, 4vw, 64px);
+        grid-template-columns: 0.8fr 0.85fr 1fr;
+        gap: clamp(20px, 4vw, 48px);
         margin-top: clamp(30px, 4vw, 52px);
         padding-top: clamp(26px, 3vw, 40px);
-        border-top: 1px solid rgba(242,239,233,0.16);
+        border-top: 1px solid rgba(126,163,188,0.28);
         min-height: 190px;
     }
     .panel__title {
@@ -1039,20 +1243,45 @@
         letter-spacing: -0.02em;
         line-height: 1.05;
     }
-    .panel__avail { margin-top: 14px; font-size: 0.78rem; color: rgba(242,239,233,0.55); }
+    .panel__avail { margin-top: 14px; font-size: 0.78rem; color: var(--brand-light); }
     .panel__desc { font-size: 1rem; color: rgba(242,239,233,0.85); line-height: 1.7; max-width: 52ch; }
     .panel__use {
         margin-top: 18px;
         padding-top: 14px;
-        border-top: 1px solid rgba(242,239,233,0.12);
+        border-top: 1px solid rgba(126,163,188,0.22);
         font-size: 0.88rem;
         color: rgba(242,239,233,0.65);
         max-width: 52ch;
     }
-    .panel__use b { font-family: var(--display); font-weight: 500; color: var(--paper); margin-right: 6px; }
+    .panel__use b { font-family: var(--display); font-weight: 500; color: var(--brand-light); margin-right: 6px; }
+    .panel__shot {
+        position: relative;
+        aspect-ratio: 4 / 3;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #0c1519;
+        border: 1px solid rgba(126,163,188,0.3);
+    }
+    .panel__shot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .panel__shot::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        box-shadow: inset 0 0 30px rgba(0,0,0,0.35);
+        pointer-events: none;
+    }
     .panel.is-swapping > * { animation: panelIn 0.5s ease both; }
     @keyframes panelIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-    @media (max-width: 760px) { .panel { grid-template-columns: 1fr; } }
+    @media (max-width: 980px) { .panel { grid-template-columns: 1fr 1fr; } .panel__shot { grid-row: 1 / 3; } }
+    @media (max-width: 760px) {
+        .panel { grid-template-columns: 1fr; }
+        .panel__shot { grid-row: auto; order: -1; max-width: 320px; }
+    }
     @media (prefers-reduced-motion: reduce) {
         .bar, .bar-scale { transition: none; }
         .panel.is-swapping > * { animation: none; }
@@ -1155,6 +1384,11 @@
         text-transform: uppercase;
         color: var(--ink-mute);
     }
+    /* Colonna flagship (LYD9009): un accento turchese la fa risaltare come top di gamma */
+    .compare thead th:last-child { border-bottom-color: var(--brand); color: var(--brand); }
+    .compare thead th:last-child small { color: var(--brand); opacity: 0.75; }
+    .compare td:last-child { background: rgba(70,115,146,0.05); border-left: 1px solid rgba(70,115,146,0.15); position: relative; padding-left: 10px;}
+    .compare thead th:last-child { position: relative; }
 
     /* ======================= USO QUOTIDIANO ======================= */
     .howto {
@@ -1167,7 +1401,8 @@
         border-bottom: 1px solid var(--line);
     }
     .howto__item + .howto__item { padding-left: clamp(18px, 2vw, 32px); border-left: 1px solid var(--line); }
-    .howto__item svg { width: 34px; height: 34px; fill: none; stroke: var(--ink); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 20px; }
+    .howto__item svg { width: 34px; height: 34px; fill: none; stroke: var(--brand); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 20px; }
+    #uso .block__head { border-color: var(--brand); }
     .howto__item h3 { font-family: var(--display); font-weight: 400; font-size: 1.15rem; letter-spacing: -0.01em; margin-bottom: 10px; }
     .howto__item p { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.65; }
     .howto__item p + p { margin-top: 10px; }
@@ -1260,6 +1495,13 @@
     .care li b { font-family: var(--display); font-weight: 500; color: var(--ink); }
     @media (max-width: 760px) { .care { grid-template-columns: 1fr; } }
 
+    /* "Da evitare": in risalto col turchese del brand */
+    .care__avoid { padding: clamp(20px, 3vw, 32px); background: rgba(70,115,146,0.06); border: 1px solid rgba(70,115,146,0.25); border-radius: 4px; }
+    .care__avoid h3 { border-bottom-color: var(--brand); color: var(--brand); }
+    .care__avoid h3 svg { stroke: var(--brand); }
+    .care__avoid li { border-bottom-color: rgba(70,115,146,0.18); }
+    .care__avoid li b { color: var(--brand); }
+
     /* ======================= GARANZIA + FAQ ======================= */
     .support {
         display: grid;
@@ -1305,9 +1547,7 @@
     .faq details > div { padding: 0 48px 22px 0; font-size: 0.9rem; color: var(--ink-soft); line-height: 1.7; }
     @media (max-width: 900px) { .support { grid-template-columns: 1fr; } }
 
-    /* Download: tre voci */
-    .downloads--3 { grid-template-columns: repeat(2, 1fr); }
-    @media (max-width: 900px) { .downloads--3 { grid-template-columns: 1fr; } }
+    /* Download: griglia di card */
 
     /* ======================= TORNA SU ======================= */
     /* Pulsante circolare a destra: compare solo avvicinandosi al fondo pagina.
@@ -1420,12 +1660,17 @@
                 <a href="#installazione"><span class="i18n-it">Installazione</span><span class="i18n-en">Installation</span></a>
                 <a href="#cura"><span class="i18n-it">Cura</span><span class="i18n-en">Care</span></a>
                 <a href="#assistenza"><span class="i18n-it">Assistenza</span><span class="i18n-en">Support</span></a>
-                <a href="#presentazione-download">Download</a>
+                <a href="#presentazione"><span class="i18n-it">Presentazione</span><span class="i18n-en">Presentation</span></a>
+                <a href="#download">Download</a>
             </nav>
             <div class="header-actions">
-                <a href="#presentazione-download" class="btn-header-quick">
-                    <span class="i18n-it">Presentazione &amp; Download / Media</span>
-                    <span class="i18n-en">Presentation &amp; Download / Media</span>
+                <a href="#presentazione" class="btn-header-quick btn-header-quick--ghost">
+                    <span class="i18n-it">Guarda la Presentazione</span>
+                    <span class="i18n-en">Watch the Presentation</span>
+                </a>
+                <a href="#download" class="btn-header-quick">
+                    <span class="i18n-it">Download / Media</span>
+                    <span class="i18n-en">Download / Media</span>
                 </a>
                 <div class="lang-switch" role="group" aria-label="Selettore lingua / Language selector">
                     <button type="button" id="lang-it" onclick="setLang('it')" aria-pressed="true" lang="it">IT</button>
@@ -1500,8 +1745,8 @@
                         </li>
                     </ul>
                     <p class="manifesto__note">
-                        <span class="i18n-it">Materiale tecnico, video e benchmark nella <a href="#presentazione-download">sezione download</a>.</span>
-                        <span class="i18n-en">Technical material, video and benchmark in the <a href="#presentazione-download">download section</a>.</span>
+                        <span class="i18n-it">Video nella <a href="#presentazione">presentazione</a>, schede tecniche e benchmark nella <a href="#download">sezione download</a>.</span>
+                        <span class="i18n-en">Video in the <a href="#presentazione">presentation</a>, technical sheets and benchmark in the <a href="#download">download section</a>.</span>
                     </p>
                 </div>
 
@@ -1617,8 +1862,8 @@
 
             <div class="explorer__top">
                 <div class="model-toggle" role="group" aria-label="Modello / Model">
-                    <button type="button" data-model="9009" aria-pressed="true">LYD9009</button>
-                    <button type="button" data-model="9000" aria-pressed="false">LYD9000</button>
+                    <button type="button" data-model="9000" aria-pressed="true">LYD9000</button>
+                    <button type="button" data-model="9009" aria-pressed="false">LYD9009</button>
                 </div>
                 <p class="explorer__hint">
                     <span class="hint-desk"><span class="i18n-it">Schema della base, vista dall'alto</span><span class="i18n-en">Base layout, top view</span></span>
@@ -1634,6 +1879,9 @@
             </div>
 
             <div class="panel" id="panel" aria-live="polite">
+                <figure class="panel__shot">
+                    <img id="panelShot" src="" alt="">
+                </figure>
                 <div>
                     <h3 class="panel__title" id="panelTitle"></h3>
                     <p class="panel__avail" id="panelAvail"></p>
@@ -1647,352 +1895,384 @@
     </section>
 
     <!-- ======================= PRODOTTO 1 — LYD9009 ======================= -->
-    <section class="product" id="lyd9009">
+    <!-- ======================= MODELLI — CAROSELLO PRODOTTI ======================= -->
+    <section class="product-carousel" id="lyd9009">
         <div class="shell">
-            <div class="product__masthead">
-                <h2 class="product__ref">
-                    LYD9009
-                    <small>
-                        <span class="i18n-it">Sink Multifunzionale</span>
-                        <span class="i18n-en">Multifunctional Sink</span>
-                    </small>
+            <div class="pc__head">
+                <h2 class="block__title">
+                    <span class="i18n-it">I due modelli</span>
+                    <span class="i18n-en">The two models</span>
                 </h2>
-                <div class="product__index">
-                    <span class="i18n-it">Modello 01 / 02</span>
-                    <span class="i18n-en">Model 01 / 02</span>
-                    <b>
-                        <span class="i18n-it">Top di gamma · Flagship</span>
-                        <span class="i18n-en">Flagship</span>
-                    </b>
+                <div class="pc__switch" role="group" aria-label="Modello / Model">
+                    <button type="button" class="pc__tab" data-idx="0" aria-pressed="true">
+                        LYD9000 <small><span class="i18n-it">Design LED</span><span class="i18n-en">LED Design</span></small>
+                    </button>
+                    <button type="button" class="pc__tab" data-idx="1" aria-pressed="false">
+                        LYD9009 <small><span class="i18n-it">Top di gamma</span><span class="i18n-en">Flagship</span></small>
+                    </button>
                 </div>
             </div>
 
-            <div class="product__layout">
-                <figure class="frame">
-                    <div class="frame__img" onclick="openModal(this.querySelector('img').src, 'Sink Multifunzionale LYD9009', this)">
-                        <img src="assets/LYD%209009%20AMB.jpg" alt="Vasca multifunzionale Love Your Dream LYD9009 ambientata">
+            <div class="pc__viewport" id="pcViewport">
+                <button type="button" class="pc__arrow pc__arrow--prev" id="pcPrev" aria-label="Modello precedente / Previous model">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+                </button>
+                <div class="pc__mask">
+                    <div class="pc__track" id="pcTrack">
+                    <article class="pc__slide" id="lyd9000-slide" data-idx="0">
+                <div class="product__masthead">
+                    <h2 class="product__ref">
+                        LYD9000
+                        <small>
+                            <span class="i18n-it">Sink Multifunzionale</span>
+                            <span class="i18n-en">Multifunctional Sink</span>
+                        </small>
+                    </h2>
+                    <div class="product__index">
+                        <span class="i18n-it">Modello 01 / 02</span>
+                        <span class="i18n-en">Model 01 / 02</span>
+                        <b>
+                            <span class="i18n-it">Design LED · GunGrey</span>
+                            <span class="i18n-en">LED Design · GunGrey</span>
+                        </b>
                     </div>
-                    <figcaption class="frame__cap">
-                        <span>LYD9009 · <span class="i18n-it">Ambientazione</span><span class="i18n-en">Lifestyle</span></span>
-                        <span>
-                            <span class="i18n-it">Clicca per ingrandire</span>
-                            <span class="i18n-en">Click to enlarge</span>
-                        </span>
-                    </figcaption>
-                </figure>
+                </div>
 
-                <div class="spec">
-                    <p class="spec__title">
-                        <span class="i18n-it">Caratteristiche</span>
-                        <span class="i18n-en">Features</span>
-                    </p>
-                    <ul class="spec__list">
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Materiale &amp; Finitura</span>
-                                <span class="i18n-en">Material &amp; Finish</span>
+                <div class="product__layout">
+                    <figure class="frame">
+                        <div class="frame__img" onclick="openModal(this.querySelector('img').src, 'Sink Multifunzionale LYD9000', this)">
+                            <img src="assets/LYD 9000 AMB.jpg" alt="Vasca multifunzionale Love Your Dream LYD9000 ambientata">
+                        </div>
+                        <figcaption class="frame__cap">
+                            <span>LYD9000 · <span class="i18n-it">Ambientazione</span><span class="i18n-en">Lifestyle</span></span>
+                            <span>
+                                <span class="i18n-it">Clicca per ingrandire</span>
+                                <span class="i18n-en">Click to enlarge</span>
                             </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Lavello artigianale in acciaio INOX 304 con texture Honeycomb e finitura PVD Black. Superficie nano antibatterica, antigraffio, resistente all'usura, antiruggine e sgrassante.</span>
-                                <span class="i18n-en">Handmade 304 stainless steel sink with Honeycomb texture and PVD Black finish. Nano-antibacterial surface, scratch- and wear-resistant, rust-preventing and degreasing.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Postazione di Lavoro</span>
-                                <span class="i18n-en">Workstation</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Workstation a 3 livelli integrati.</span>
-                                <span class="i18n-en">3 integrated functional levels workstation.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Miscelatore</span>
-                                <span class="i18n-en">Tap</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Miscelatore 7+3 funzioni su base in vetro nero, con pulsantiera a 4 tasti: lava bicchieri, cascata, rubinetto, pioggia.</span>
-                                <span class="i18n-en">7+3 function tap on a black glass base, with a 4-button panel: cup washer, waterfall, faucet, rain.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Erogazioni</span>
-                                <span class="i18n-en">Water Outlets</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Cup Washer (risciacquo bicchieri), getto Waterfall a cascata, getto Rain a pioggia e doccetta estraibile a 3 getti con tubo da 150 cm.</span>
-                                <span class="i18n-en">Cup Washer, Waterfall stream, Rain stream and 3-spray pull-out head on a 150 cm hose.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Display Digitale</span>
-                                <span class="i18n-en">Digital Display</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Mostra la temperatura dell'acqua e il tempo di erogazione. È alimentato dalla turbina idroelettrica integrata: zero batterie, nessun collegamento elettrico.</span>
-                                <span class="i18n-en">Shows water temperature and running time. Powered by the integrated hydroelectric turbine: no batteries, no mains connection.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Controlli Integrati</span>
-                                <span class="i18n-en">Integrated Controls</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Dispenser sapone con flacone nascosto sotto il piano e manopola per aprire e chiudere lo scarico senza mettere le mani nell'acqua.</span>
-                                <span class="i18n-en">Soap dispenser with the bottle hidden under the worktop, and a knob that opens and closes the drain without reaching into the water.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Certificazioni</span>
-                                <span class="i18n-en">Certifications</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Miscelatore certificato CE e conforme KTW, sia nelle parti in silicone sia in quelle in acciaio. Lavello e taglieri conformi MOCA e LFGB per il contatto con gli alimenti.</span>
-                                <span class="i18n-en">CE-certified tap, KTW-compliant for both silicone and steel parts. Sink and cutting boards comply with MOCA and LFGB for food contact.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Dimensioni</span>
-                                <span class="i18n-en">Dimensions</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Lavello 860x500 mm (foro incasso 840x480 mm, sopratop su base da 90 cm). Miscelatore: base 858 mm, altezza 433 mm.</span>
-                                <span class="i18n-en">Sink 860x500 mm (cutout 840x480 mm, topmount for 90 cm cabinet). Tap: 858 mm base, 433 mm high.</span>
-                            </span>
-                        </li>
-                    </ul>
+                        </figcaption>
+                    </figure>
 
-                    <div class="accessories">
-                        <p class="spec__title" style="margin-bottom:10px;">
-                            <span class="i18n-it">Accessori Inclusi</span>
-                            <span class="i18n-en">Included Accessories</span>
+                    <div class="spec">
+                        <p class="spec__title">
+                            <span class="i18n-it">Caratteristiche</span>
+                            <span class="i18n-en">Features</span>
+                        </p>
+                        <ul class="spec__list">
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Materiale &amp; Finitura</span>
+                                    <span class="i18n-en">Material &amp; Finish</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Lavello artigianale in acciaio INOX 304 con texture Honeycomb e finitura PVD Black. Superficie nano antibatterica, antigraffio, resistente all'usura, antiruggine e sgrassante.</span>
+                                    <span class="i18n-en">Handmade 304 stainless steel sink with Honeycomb texture and PVD Black finish. Nano-antibacterial surface, scratch- and wear-resistant, rust-preventing and degreasing.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Postazione di Lavoro</span>
+                                    <span class="i18n-en">Workstation</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Workstation a 3 livelli integrati.</span>
+                                    <span class="i18n-en">3 integrated functional levels workstation.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Miscelatore</span>
+                                    <span class="i18n-en">Tap</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Miscelatore 3+3 funzioni su base in vetro nero. Corpo in acciaio INOX 304 GunGrey con LED blu integrato.</span>
+                                    <span class="i18n-en">3+3 function tap on a black glass base. GunGrey 304 stainless steel body with integrated blue LED.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Erogazioni</span>
+                                    <span class="i18n-en">Water Outlets</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Doccetta estraibile a 3 getti (Standard, Spray, Jet) con tubo da 150 cm e getto Rain a pioggia, ciascuno con il proprio pulsante.</span>
+                                    <span class="i18n-en">3-spray pull-out head (Standard, Spray, Jet) on a 150 cm hose, and Rain stream, each with its own button.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Display Digitale</span>
+                                    <span class="i18n-en">Digital Display</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Mostra la temperatura dell'acqua e il tempo di erogazione. È alimentato dalla turbina idroelettrica integrata: zero batterie, nessun collegamento elettrico.</span>
+                                    <span class="i18n-en">Shows water temperature and running time. Powered by the integrated hydroelectric turbine: no batteries, no mains connection.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Certificazioni</span>
+                                    <span class="i18n-en">Certifications</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Miscelatore certificato CE e conforme KTW, sia nelle parti in silicone sia in quelle in acciaio. Lavello e taglieri conformi MOCA e LFGB per il contatto con gli alimenti.</span>
+                                    <span class="i18n-en">CE-certified tap, KTW-compliant for both silicone and steel parts. Sink and cutting boards comply with MOCA and LFGB for food contact.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Dimensioni</span>
+                                    <span class="i18n-en">Dimensions</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Lavello 860x500 mm (foro incasso 840x480 mm, sopratop su base da 90 cm). Miscelatore: base 297 mm, altezza 424 mm.</span>
+                                    <span class="i18n-en">Sink 860x500 mm (cutout 840x480 mm, topmount for 90 cm cabinet). Tap: 297 mm base, 424 mm high.</span>
+                                </span>
+                            </li>
+                        </ul>
+
+                        <div class="accessories">
+                            <p class="spec__title" style="margin-bottom:10px;">
+                                <span class="i18n-it">Accessori Inclusi</span>
+                                <span class="i18n-en">Included Accessories</span>
+                            </p>
+                            <p>
+                                <span class="i18n-it">Vaschetta Inox con tappo, Cestello Inox forato, Tagliere Inox satinato, Tagliere in legno di Bambù, Panno microfibra, 2 spugne, filtro di riserva con chiave, brugola per regolare i pulsanti, 10 morsetti di fissaggio (1 di scorta), kit di scarico con troppo pieno.</span>
+                                <span class="i18n-en">Stainless steel basin with drain plug, perforated stainless steel basket, satin stainless steel cutting board, bamboo cutting board, microfiber cloth, 2 cleaning sponges, spare filter with key, Allen key for button adjustment, 10 mounting clips (1 spare), drain kit with overflow.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="drawing">
+                    <div class="drawing__meta">
+                        <p class="spec__title">
+                            <span class="i18n-it">Disegno Tecnico LYD9000</span>
+                            <span class="i18n-en">Technical Drawing LYD9000</span>
                         </p>
                         <p>
-                            <span class="i18n-it">Vaschetta Inox con tappo, Cestello Inox forato, Tagliere Inox satinato, Tagliere in legno di Bambù, Panno microfibra, 2 spugne, filtro di riserva con chiave, brugola per regolare i pulsanti, 10 morsetti di fissaggio (1 di scorta), kit di scarico con troppo pieno, flacone per il sapone.</span>
-                            <span class="i18n-en">Stainless steel basin with drain plug, perforated stainless steel basket, satin stainless steel cutting board, bamboo cutting board, microfiber cloth, 2 cleaning sponges, spare filter with key, Allen key for button adjustment, 10 mounting clips (1 spare), drain kit with overflow, soap dispenser bottle.</span>
+                            <span class="i18n-it">Quote e ingombri per l'incasso. Clicca per ingrandire.</span>
+                            <span class="i18n-en">Dimensions and clearances for installation. Click to enlarge.</span>
                         </p>
                     </div>
+                    <div class="drawing__img" onclick="openModal(this.querySelector('img').src, 'Disegno Tecnico LYD9000', this)">
+                        <img src="assets/LYD_9000.png" alt="Disegno tecnico vasca multifunzione LYD9000">
+                    </div>
                 </div>
+
+                <details class="datasheet">
+                    <summary>
+                        <span><span class="i18n-it">Scheda tecnica completa LYD9000</span><span class="i18n-en">Full technical sheet LYD9000</span></span>
+                        <span class="plus" aria-hidden="true"></span>
+                    </summary>
+                    <dl class="ds">
+                        <div><dt><span class="i18n-it">Composizione</span><span class="i18n-en">Set</span></dt><dd><span class="i18n-it">LYD9000.T (miscelatore) + LYD9000.S (lavello)</span><span class="i18n-en">LYD9000.T (tap) + LYD9000.S (sink)</span></dd></div>
+                        <div><dt><span class="i18n-it">Codici EAN</span><span class="i18n-en">EAN codes</span></dt><dd><span class="i18n-it">Miscelatore 0666186410288<small>Lavello 0666186410264</small></span><span class="i18n-en">Tap 0666186410288<small>Sink 0666186410264</small></span></dd></div>
+                        <div><dt><span class="i18n-it">Miscelatore</span><span class="i18n-en">Tap</span></dt><dd><span class="i18n-it">3+3 funzioni, base in vetro nero</span><span class="i18n-en">3+3 functions, black glass base</span></dd></div>
+                        <div><dt><span class="i18n-it">Ingombro miscelatore</span><span class="i18n-en">Tap size</span></dt><dd><span class="i18n-it">Base 297 x 67 mm, altezza 424 mm, sporgenza 214 mm<small>Attacchi M28x1,5 e M32x1,5</small></span><span class="i18n-en">Base 297 x 67 mm, height 424 mm, reach 214 mm<small>M28x1.5 and M32x1.5 threads</small></span></dd></div>
+                        <div><dt><span class="i18n-it">Lavello</span><span class="i18n-en">Sink</span></dt><dd><span class="i18n-it">860 x 500 mm, sopratop</span><span class="i18n-en">860 x 500 mm, topmount</span></dd></div>
+                        <div><dt><span class="i18n-it">Foro di incasso</span><span class="i18n-en">Worktop cutout</span></dt><dd><span class="i18n-it">840 x 480 mm</span><span class="i18n-en">840 x 480 mm</span></dd></div>
+                        <div><dt><span class="i18n-it">Vasca</span><span class="i18n-en">Bowl</span></dt><dd><span class="i18n-it">Larghezza ≈ 798 mm in alto, 780 mm sul fondo</span><span class="i18n-en">Width ≈ 798 mm at top, 780 mm at bottom</span></dd></div>
+                        <div><dt><span class="i18n-it">Mobile</span><span class="i18n-en">Cabinet</span></dt><dd><span class="i18n-it">Base da 90 cm</span><span class="i18n-en">90 cm base unit</span></dd></div>
+                        <div><dt><span class="i18n-it">Fissaggio</span><span class="i18n-en">Mounting</span></dt><dd><span class="i18n-it">9 morsetti (3 fronte, 2 retro, 2 per lato), 1 di scorta</span><span class="i18n-en">9 clips (3 front, 2 back, 2 per side), 1 spare</span></dd></div>
+                        <div><dt><span class="i18n-it">Troppo pieno</span><span class="i18n-en">Overflow</span></dt><dd><span class="i18n-it">Collegabile a sinistra o a destra</span><span class="i18n-en">Connects on the left or right</span></dd></div>
+                        <div><dt><span class="i18n-it">Allacciamento</span><span class="i18n-en">Water supply</span></dt><dd><span class="i18n-it">2 flessibili 3/8" da 80 cm (rosso caldo, blu freddo)</span><span class="i18n-en">2 × 3/8" flexible hoses, 80 cm (red hot, blue cold)</span></dd></div>
+                        <div><dt><span class="i18n-it">Pressione di esercizio</span><span class="i18n-en">Operating pressure</span></dt><dd><span class="i18n-it">0,1 – 0,5 MPa<small>Oltre: installare un riduttore di pressione</small></span><span class="i18n-en">0.1 – 0.5 MPa<small>Above: fit a pressure reducer</small></span></dd></div>
+                        <div><dt><span class="i18n-it">Doccetta</span><span class="i18n-en">Pull-out head</span></dt><dd><span class="i18n-it">3 getti, tubo estraibile 150 cm, sfera di gravità</span><span class="i18n-en">3 sprays, 150 cm pull-out hose, gravity weight</span></dd></div>
+                        <div><dt><span class="i18n-it">Display</span><span class="i18n-en">Display</span></dt><dd><span class="i18n-it">Temperatura e tempo di erogazione, turbina idroelettrica</span><span class="i18n-en">Temperature and running time, hydroelectric turbine</span></dd></div>
+                        <div><dt><span class="i18n-it">Peso netto</span><span class="i18n-en">Net weight</span></dt><dd><span class="i18n-it">14,25 kg<small>Lavello 11,65 kg · miscelatore 2,6 kg</small></span><span class="i18n-en">14.25 kg<small>Sink 11.65 kg · tap 2.6 kg</small></span></dd></div>
+                        <div><dt><span class="i18n-it">Peso lordo</span><span class="i18n-en">Gross weight</span></dt><dd><span class="i18n-it">18,95 kg, in due scatole</span><span class="i18n-en">18.95 kg, in two boxes</span></dd></div>
+                    </dl>
+                </details>
+                    </article>
+                    <article class="pc__slide" id="lyd9009-slide" data-idx="1">
+                <div class="product__masthead">
+                    <h2 class="product__ref">
+                        LYD9009
+                        <small>
+                            <span class="i18n-it">Sink Multifunzionale</span>
+                            <span class="i18n-en">Multifunctional Sink</span>
+                        </small>
+                    </h2>
+                    <div class="product__index">
+                        <span class="i18n-it">Modello 02 / 02</span>
+                        <span class="i18n-en">Model 02 / 02</span>
+                        <b>
+                            <span class="i18n-it">Top di gamma · Flagship</span>
+                            <span class="i18n-en">Flagship</span>
+                        </b>
+                    </div>
+                </div>
+
+                <div class="product__layout">
+                    <figure class="frame">
+                        <div class="frame__img" onclick="openModal(this.querySelector('img').src, 'Sink Multifunzionale LYD9009', this)">
+                            <img src="assets/LYD 9009 AMB.jpg" alt="Vasca multifunzionale Love Your Dream LYD9009 ambientata">
+                        </div>
+                        <figcaption class="frame__cap">
+                            <span>LYD9009 · <span class="i18n-it">Ambientazione</span><span class="i18n-en">Lifestyle</span></span>
+                            <span>
+                                <span class="i18n-it">Clicca per ingrandire</span>
+                                <span class="i18n-en">Click to enlarge</span>
+                            </span>
+                        </figcaption>
+                    </figure>
+
+                    <div class="spec">
+                        <p class="spec__title">
+                            <span class="i18n-it">Caratteristiche</span>
+                            <span class="i18n-en">Features</span>
+                        </p>
+                        <ul class="spec__list">
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Materiale &amp; Finitura</span>
+                                    <span class="i18n-en">Material &amp; Finish</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Lavello artigianale in acciaio INOX 304 con texture Honeycomb e finitura PVD Black. Superficie nano antibatterica, antigraffio, resistente all'usura, antiruggine e sgrassante.</span>
+                                    <span class="i18n-en">Handmade 304 stainless steel sink with Honeycomb texture and PVD Black finish. Nano-antibacterial surface, scratch- and wear-resistant, rust-preventing and degreasing.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Postazione di Lavoro</span>
+                                    <span class="i18n-en">Workstation</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Workstation a 3 livelli integrati.</span>
+                                    <span class="i18n-en">3 integrated functional levels workstation.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Miscelatore</span>
+                                    <span class="i18n-en">Tap</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Miscelatore 7+3 funzioni su base in vetro nero, con pulsantiera a 4 tasti: lava bicchieri, cascata, rubinetto, pioggia.</span>
+                                    <span class="i18n-en">7+3 function tap on a black glass base, with a 4-button panel: cup washer, waterfall, faucet, rain.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Erogazioni</span>
+                                    <span class="i18n-en">Water Outlets</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Cup Washer (risciacquo bicchieri), getto Waterfall a cascata, getto Rain a pioggia e doccetta estraibile a 3 getti con tubo da 150 cm.</span>
+                                    <span class="i18n-en">Cup Washer, Waterfall stream, Rain stream and 3-spray pull-out head on a 150 cm hose.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Display Digitale</span>
+                                    <span class="i18n-en">Digital Display</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Mostra la temperatura dell'acqua e il tempo di erogazione. È alimentato dalla turbina idroelettrica integrata: zero batterie, nessun collegamento elettrico.</span>
+                                    <span class="i18n-en">Shows water temperature and running time. Powered by the integrated hydroelectric turbine: no batteries, no mains connection.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Controlli Integrati</span>
+                                    <span class="i18n-en">Integrated Controls</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Dispenser sapone con flacone nascosto sotto il piano e manopola per aprire e chiudere lo scarico senza mettere le mani nell'acqua.</span>
+                                    <span class="i18n-en">Soap dispenser with the bottle hidden under the worktop, and a knob that opens and closes the drain without reaching into the water.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Certificazioni</span>
+                                    <span class="i18n-en">Certifications</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Miscelatore certificato CE e conforme KTW, sia nelle parti in silicone sia in quelle in acciaio. Lavello e taglieri conformi MOCA e LFGB per il contatto con gli alimenti.</span>
+                                    <span class="i18n-en">CE-certified tap, KTW-compliant for both silicone and steel parts. Sink and cutting boards comply with MOCA and LFGB for food contact.</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="spec__k">
+                                    <span class="i18n-it">Dimensioni</span>
+                                    <span class="i18n-en">Dimensions</span>
+                                </span>
+                                <span class="spec__v">
+                                    <span class="i18n-it">Lavello 860x500 mm (foro incasso 840x480 mm, sopratop su base da 90 cm). Miscelatore: base 858 mm, altezza 433 mm.</span>
+                                    <span class="i18n-en">Sink 860x500 mm (cutout 840x480 mm, topmount for 90 cm cabinet). Tap: 858 mm base, 433 mm high.</span>
+                                </span>
+                            </li>
+                        </ul>
+
+                        <div class="accessories">
+                            <p class="spec__title" style="margin-bottom:10px;">
+                                <span class="i18n-it">Accessori Inclusi</span>
+                                <span class="i18n-en">Included Accessories</span>
+                            </p>
+                            <p>
+                                <span class="i18n-it">Vaschetta Inox con tappo, Cestello Inox forato, Tagliere Inox satinato, Tagliere in legno di Bambù, Panno microfibra, 2 spugne, filtro di riserva con chiave, brugola per regolare i pulsanti, 10 morsetti di fissaggio (1 di scorta), kit di scarico con troppo pieno, flacone per il sapone.</span>
+                                <span class="i18n-en">Stainless steel basin with drain plug, perforated stainless steel basket, satin stainless steel cutting board, bamboo cutting board, microfiber cloth, 2 cleaning sponges, spare filter with key, Allen key for button adjustment, 10 mounting clips (1 spare), drain kit with overflow, soap dispenser bottle.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="drawing">
+                    <div class="drawing__meta">
+                        <p class="spec__title">
+                            <span class="i18n-it">Disegno Tecnico LYD9009</span>
+                            <span class="i18n-en">Technical Drawing LYD9009</span>
+                        </p>
+                        <p>
+                            <span class="i18n-it">Quote e ingombri per l'incasso. Clicca per ingrandire.</span>
+                            <span class="i18n-en">Dimensions and clearances for installation. Click to enlarge.</span>
+                        </p>
+                    </div>
+                    <div class="drawing__img" onclick="openModal(this.querySelector('img').src, 'Disegno Tecnico LYD9009', this)">
+                        <img src="assets/LYD_9009.png" alt="Disegno tecnico vasca multifunzione LYD9009">
+                    </div>
+                </div>
+
+                <details class="datasheet">
+                    <summary>
+                        <span><span class="i18n-it">Scheda tecnica completa LYD9009</span><span class="i18n-en">Full technical sheet LYD9009</span></span>
+                        <span class="plus" aria-hidden="true"></span>
+                    </summary>
+                    <dl class="ds">
+                        <div><dt><span class="i18n-it">Composizione</span><span class="i18n-en">Set</span></dt><dd><span class="i18n-it">LYD9009.T (miscelatore) + LYD9009.S (lavello)</span><span class="i18n-en">LYD9009.T (tap) + LYD9009.S (sink)</span></dd></div>
+                        <div><dt><span class="i18n-it">Codici EAN</span><span class="i18n-en">EAN codes</span></dt><dd><span class="i18n-it">Miscelatore 0666186410271<small>Lavello 0666186410295</small></span><span class="i18n-en">Tap 0666186410271<small>Sink 0666186410295</small></span></dd></div>
+                        <div><dt><span class="i18n-it">Miscelatore</span><span class="i18n-en">Tap</span></dt><dd><span class="i18n-it">7+3 funzioni, base in vetro nero</span><span class="i18n-en">7+3 functions, black glass base</span></dd></div>
+                        <div><dt><span class="i18n-it">Ingombro miscelatore</span><span class="i18n-en">Tap size</span></dt><dd><span class="i18n-it">Base 858 x 75 mm, altezza 433 mm, sporgenza 219 mm</span><span class="i18n-en">Base 858 x 75 mm, height 433 mm, reach 219 mm</span></dd></div>
+                        <div><dt><span class="i18n-it">Lavello</span><span class="i18n-en">Sink</span></dt><dd><span class="i18n-it">860 x 500 mm, sopratop</span><span class="i18n-en">860 x 500 mm, topmount</span></dd></div>
+                        <div><dt><span class="i18n-it">Foro di incasso</span><span class="i18n-en">Worktop cutout</span></dt><dd><span class="i18n-it">840 x 480 mm</span><span class="i18n-en">840 x 480 mm</span></dd></div>
+                        <div><dt><span class="i18n-it">Vasca</span><span class="i18n-en">Bowl</span></dt><dd><span class="i18n-it">Larghezza ≈ 798 mm in alto, 780 mm sul fondo</span><span class="i18n-en">Width ≈ 798 mm at top, 780 mm at bottom</span></dd></div>
+                        <div><dt><span class="i18n-it">Mobile</span><span class="i18n-en">Cabinet</span></dt><dd><span class="i18n-it">Base da 90 cm</span><span class="i18n-en">90 cm base unit</span></dd></div>
+                        <div><dt><span class="i18n-it">Fissaggio</span><span class="i18n-en">Mounting</span></dt><dd><span class="i18n-it">9 morsetti (3 fronte, 2 retro, 2 per lato), 1 di scorta</span><span class="i18n-en">9 clips (3 front, 2 back, 2 per side), 1 spare</span></dd></div>
+                        <div><dt><span class="i18n-it">Troppo pieno</span><span class="i18n-en">Overflow</span></dt><dd><span class="i18n-it">Collegabile a sinistra o a destra</span><span class="i18n-en">Connects on the left or right</span></dd></div>
+                        <div><dt><span class="i18n-it">Allacciamento</span><span class="i18n-en">Water supply</span></dt><dd><span class="i18n-it">2 flessibili 3/8" da 80 cm (rosso caldo, blu freddo)</span><span class="i18n-en">2 × 3/8" flexible hoses, 80 cm (red hot, blue cold)</span></dd></div>
+                        <div><dt><span class="i18n-it">Pressione di esercizio</span><span class="i18n-en">Operating pressure</span></dt><dd><span class="i18n-it">0,1 – 0,5 MPa<small>Oltre: installare un riduttore di pressione</small></span><span class="i18n-en">0.1 – 0.5 MPa<small>Above: fit a pressure reducer</small></span></dd></div>
+                        <div><dt><span class="i18n-it">Doccetta</span><span class="i18n-en">Pull-out head</span></dt><dd><span class="i18n-it">3 getti, tubo estraibile 150 cm, sfera di gravità</span><span class="i18n-en">3 sprays, 150 cm pull-out hose, gravity weight</span></dd></div>
+                        <div><dt><span class="i18n-it">Display</span><span class="i18n-en">Display</span></dt><dd><span class="i18n-it">Temperatura e tempo di erogazione, turbina idroelettrica</span><span class="i18n-en">Temperature and running time, hydroelectric turbine</span></dd></div>
+                        <div><dt><span class="i18n-it">Peso netto</span><span class="i18n-en">Net weight</span></dt><dd><span class="i18n-it">17,1 kg<small>Lavello 11,95 kg · miscelatore 5,15 kg</small></span><span class="i18n-en">17.1 kg<small>Sink 11.95 kg · tap 5.15 kg</small></span></dd></div>
+                        <div><dt><span class="i18n-it">Peso lordo</span><span class="i18n-en">Gross weight</span></dt><dd><span class="i18n-it">22,8 kg, in due scatole</span><span class="i18n-en">22.8 kg, in two boxes</span></dd></div>
+                    </dl>
+                </details>
+                    </article>
+                </div>
+                </div>
+                <button type="button" class="pc__arrow pc__arrow--next" id="pcNext" aria-label="Modello successivo / Next model">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+                </button>
             </div>
 
-            <div class="drawing">
-                <div class="drawing__meta">
-                    <p class="spec__title">
-                        <span class="i18n-it">Disegno Tecnico LYD9009</span>
-                        <span class="i18n-en">Technical Drawing LYD9009</span>
-                    </p>
-                    <p>
-                        <span class="i18n-it">Quote e ingombri per l'incasso. Clicca per ingrandire.</span>
-                        <span class="i18n-en">Dimensions and clearances for installation. Click to enlarge.</span>
-                    </p>
-                </div>
-                <div class="drawing__img" onclick="openModal(this.querySelector('img').src, 'Disegno Tecnico LYD9009', this)">
-                    <img src="assets/LYD_9009.png" alt="Disegno tecnico vasca multifunzione LYD9009">
-                </div>
+            <div class="pc__dots" role="tablist" aria-label="Vai al modello / Go to model">
+                <button type="button" class="pc__dot" data-idx="0" aria-pressed="true" aria-label="LYD9000"></button>
+                <button type="button" class="pc__dot" data-idx="1" aria-pressed="false" aria-label="LYD9009"></button>
             </div>
-
-            <details class="datasheet">
-                <summary>
-                    <span><span class="i18n-it">Scheda tecnica completa LYD9009</span><span class="i18n-en">Full technical sheet LYD9009</span></span>
-                    <span class="plus" aria-hidden="true"></span>
-                </summary>
-                <dl class="ds">
-                    <div><dt><span class="i18n-it">Composizione</span><span class="i18n-en">Set</span></dt><dd><span class="i18n-it">LYD9009.T (miscelatore) + LYD9009.S (lavello)</span><span class="i18n-en">LYD9009.T (tap) + LYD9009.S (sink)</span></dd></div>
-                    <div><dt><span class="i18n-it">Codici EAN</span><span class="i18n-en">EAN codes</span></dt><dd><span class="i18n-it">Miscelatore 0666186410271<small>Lavello 0666186410295</small></span><span class="i18n-en">Tap 0666186410271<small>Sink 0666186410295</small></span></dd></div>
-                    <div><dt><span class="i18n-it">Miscelatore</span><span class="i18n-en">Tap</span></dt><dd><span class="i18n-it">7+3 funzioni, base in vetro nero</span><span class="i18n-en">7+3 functions, black glass base</span></dd></div>
-                    <div><dt><span class="i18n-it">Ingombro miscelatore</span><span class="i18n-en">Tap size</span></dt><dd><span class="i18n-it">Base 858 x 75 mm, altezza 433 mm, sporgenza 219 mm</span><span class="i18n-en">Base 858 x 75 mm, height 433 mm, reach 219 mm</span></dd></div>
-                    <div><dt><span class="i18n-it">Lavello</span><span class="i18n-en">Sink</span></dt><dd><span class="i18n-it">860 x 500 mm, sopratop</span><span class="i18n-en">860 x 500 mm, topmount</span></dd></div>
-                    <div><dt><span class="i18n-it">Foro di incasso</span><span class="i18n-en">Worktop cutout</span></dt><dd><span class="i18n-it">840 x 480 mm</span><span class="i18n-en">840 x 480 mm</span></dd></div>
-                    <div><dt><span class="i18n-it">Vasca</span><span class="i18n-en">Bowl</span></dt><dd><span class="i18n-it">Larghezza ≈ 798 mm in alto, 780 mm sul fondo</span><span class="i18n-en">Width ≈ 798 mm at top, 780 mm at bottom</span></dd></div>
-                    <div><dt><span class="i18n-it">Mobile</span><span class="i18n-en">Cabinet</span></dt><dd><span class="i18n-it">Base da 90 cm</span><span class="i18n-en">90 cm base unit</span></dd></div>
-                    <div><dt><span class="i18n-it">Fissaggio</span><span class="i18n-en">Mounting</span></dt><dd><span class="i18n-it">9 morsetti (3 fronte, 2 retro, 2 per lato), 1 di scorta</span><span class="i18n-en">9 clips (3 front, 2 back, 2 per side), 1 spare</span></dd></div>
-                    <div><dt><span class="i18n-it">Troppo pieno</span><span class="i18n-en">Overflow</span></dt><dd><span class="i18n-it">Collegabile a sinistra o a destra</span><span class="i18n-en">Connects on the left or right</span></dd></div>
-                    <div><dt><span class="i18n-it">Allacciamento</span><span class="i18n-en">Water supply</span></dt><dd><span class="i18n-it">2 flessibili 3/8" da 80 cm (rosso caldo, blu freddo)</span><span class="i18n-en">2 × 3/8" flexible hoses, 80 cm (red hot, blue cold)</span></dd></div>
-                    <div><dt><span class="i18n-it">Pressione di esercizio</span><span class="i18n-en">Operating pressure</span></dt><dd><span class="i18n-it">0,1 – 0,5 MPa<small>Oltre: installare un riduttore di pressione</small></span><span class="i18n-en">0.1 – 0.5 MPa<small>Above: fit a pressure reducer</small></span></dd></div>
-                    <div><dt><span class="i18n-it">Doccetta</span><span class="i18n-en">Pull-out head</span></dt><dd><span class="i18n-it">3 getti, tubo estraibile 150 cm, sfera di gravità</span><span class="i18n-en">3 sprays, 150 cm pull-out hose, gravity weight</span></dd></div>
-                    <div><dt><span class="i18n-it">Display</span><span class="i18n-en">Display</span></dt><dd><span class="i18n-it">Temperatura e tempo di erogazione, turbina idroelettrica</span><span class="i18n-en">Temperature and running time, hydroelectric turbine</span></dd></div>
-                    <div><dt><span class="i18n-it">Peso netto</span><span class="i18n-en">Net weight</span></dt><dd><span class="i18n-it">17,1 kg<small>Lavello 11,95 kg · miscelatore 5,15 kg</small></span><span class="i18n-en">17.1 kg<small>Sink 11.95 kg · tap 5.15 kg</small></span></dd></div>
-                    <div><dt><span class="i18n-it">Peso lordo</span><span class="i18n-en">Gross weight</span></dt><dd><span class="i18n-it">22,8 kg, in due scatole</span><span class="i18n-en">22.8 kg, in two boxes</span></dd></div>
-                </dl>
-            </details>
         </div>
     </section>
 
-    <!-- ======================= PRODOTTO 2 — LYD9000 ======================= -->
-    <section class="product product--alt" id="lyd9000">
-        <div class="shell">
-            <div class="product__masthead">
-                <h2 class="product__ref">
-                    LYD9000
-                    <small>
-                        <span class="i18n-it">Sink Multifunzionale</span>
-                        <span class="i18n-en">Multifunctional Sink</span>
-                    </small>
-                </h2>
-                <div class="product__index">
-                    <span class="i18n-it">Modello 02 / 02</span>
-                    <span class="i18n-en">Model 02 / 02</span>
-                    <b>
-                        <span class="i18n-it">Design LED · GunGrey</span>
-                        <span class="i18n-en">LED Design · GunGrey</span>
-                    </b>
-                </div>
-            </div>
-
-            <div class="product__layout">
-                <figure class="frame">
-                    <div class="frame__img" onclick="openModal(this.querySelector('img').src, 'Sink Multifunzionale LYD9000', this)">
-                        <img src="assets/LYD%209000%20AMB.jpg" alt="Vasca multifunzionale Love Your Dream LYD9000 ambientata">
-                    </div>
-                    <figcaption class="frame__cap">
-                        <span>LYD9000 · <span class="i18n-it">Ambientazione</span><span class="i18n-en">Lifestyle</span></span>
-                        <span>
-                            <span class="i18n-it">Clicca per ingrandire</span>
-                            <span class="i18n-en">Click to enlarge</span>
-                        </span>
-                    </figcaption>
-                </figure>
-
-                <div class="spec">
-                    <p class="spec__title">
-                        <span class="i18n-it">Caratteristiche</span>
-                        <span class="i18n-en">Features</span>
-                    </p>
-                    <ul class="spec__list">
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Materiale &amp; Finitura</span>
-                                <span class="i18n-en">Material &amp; Finish</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Lavello artigianale in acciaio INOX 304 con texture Honeycomb e finitura PVD Black. Superficie nano antibatterica, antigraffio, resistente all'usura, antiruggine e sgrassante.</span>
-                                <span class="i18n-en">Handmade 304 stainless steel sink with Honeycomb texture and PVD Black finish. Nano-antibacterial surface, scratch- and wear-resistant, rust-preventing and degreasing.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Postazione di Lavoro</span>
-                                <span class="i18n-en">Workstation</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Workstation a 3 livelli integrati.</span>
-                                <span class="i18n-en">3 integrated functional levels workstation.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Miscelatore</span>
-                                <span class="i18n-en">Tap</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Miscelatore 3+3 funzioni su base in vetro nero. Corpo in acciaio INOX 304 GunGrey con LED blu integrato.</span>
-                                <span class="i18n-en">3+3 function tap on a black glass base. GunGrey 304 stainless steel body with integrated blue LED.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Erogazioni</span>
-                                <span class="i18n-en">Water Outlets</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Doccetta estraibile a 3 getti (Standard, Spray, Jet) con tubo da 150 cm e getto Rain a pioggia, ciascuno con il proprio pulsante.</span>
-                                <span class="i18n-en">3-spray pull-out head (Standard, Spray, Jet) on a 150 cm hose, and Rain stream, each with its own button.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Display Digitale</span>
-                                <span class="i18n-en">Digital Display</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Mostra la temperatura dell'acqua e il tempo di erogazione. È alimentato dalla turbina idroelettrica integrata: zero batterie, nessun collegamento elettrico.</span>
-                                <span class="i18n-en">Shows water temperature and running time. Powered by the integrated hydroelectric turbine: no batteries, no mains connection.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Certificazioni</span>
-                                <span class="i18n-en">Certifications</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Miscelatore certificato CE e conforme KTW, sia nelle parti in silicone sia in quelle in acciaio. Lavello e taglieri conformi MOCA e LFGB per il contatto con gli alimenti.</span>
-                                <span class="i18n-en">CE-certified tap, KTW-compliant for both silicone and steel parts. Sink and cutting boards comply with MOCA and LFGB for food contact.</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span class="spec__k">
-                                <span class="i18n-it">Dimensioni</span>
-                                <span class="i18n-en">Dimensions</span>
-                            </span>
-                            <span class="spec__v">
-                                <span class="i18n-it">Lavello 860x500 mm (foro incasso 840x480 mm, sopratop su base da 90 cm). Miscelatore: base 297 mm, altezza 424 mm.</span>
-                                <span class="i18n-en">Sink 860x500 mm (cutout 840x480 mm, topmount for 90 cm cabinet). Tap: 297 mm base, 424 mm high.</span>
-                            </span>
-                        </li>
-                    </ul>
-
-                    <div class="accessories">
-                        <p class="spec__title" style="margin-bottom:10px;">
-                            <span class="i18n-it">Accessori Inclusi</span>
-                            <span class="i18n-en">Included Accessories</span>
-                        </p>
-                        <p>
-                            <span class="i18n-it">Vaschetta Inox con tappo, Cestello Inox forato, Tagliere Inox satinato, Tagliere in legno di Bambù, Panno microfibra, 2 spugne, filtro di riserva con chiave, brugola per regolare i pulsanti, 10 morsetti di fissaggio (1 di scorta), kit di scarico con troppo pieno.</span>
-                            <span class="i18n-en">Stainless steel basin with drain plug, perforated stainless steel basket, satin stainless steel cutting board, bamboo cutting board, microfiber cloth, 2 cleaning sponges, spare filter with key, Allen key for button adjustment, 10 mounting clips (1 spare), drain kit with overflow.</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="drawing">
-                <div class="drawing__meta">
-                    <p class="spec__title">
-                        <span class="i18n-it">Disegno Tecnico LYD9000</span>
-                        <span class="i18n-en">Technical Drawing LYD9000</span>
-                    </p>
-                    <p>
-                        <span class="i18n-it">Quote e ingombri per l'incasso. Clicca per ingrandire.</span>
-                        <span class="i18n-en">Dimensions and clearances for installation. Click to enlarge.</span>
-                    </p>
-                </div>
-                <div class="drawing__img" onclick="openModal(this.querySelector('img').src, 'Disegno Tecnico LYD9000', this)">
-                    <img src="assets/LYD_9000.png" alt="Disegno tecnico vasca multifunzione LYD9000">
-                </div>
-            </div>
-
-            <details class="datasheet">
-                <summary>
-                    <span><span class="i18n-it">Scheda tecnica completa LYD9000</span><span class="i18n-en">Full technical sheet LYD9000</span></span>
-                    <span class="plus" aria-hidden="true"></span>
-                </summary>
-                <dl class="ds">
-                    <div><dt><span class="i18n-it">Composizione</span><span class="i18n-en">Set</span></dt><dd><span class="i18n-it">LYD9000.T (miscelatore) + LYD9000.S (lavello)</span><span class="i18n-en">LYD9000.T (tap) + LYD9000.S (sink)</span></dd></div>
-                    <div><dt><span class="i18n-it">Codici EAN</span><span class="i18n-en">EAN codes</span></dt><dd><span class="i18n-it">Miscelatore 0666186410288<small>Lavello 0666186410264</small></span><span class="i18n-en">Tap 0666186410288<small>Sink 0666186410264</small></span></dd></div>
-                    <div><dt><span class="i18n-it">Miscelatore</span><span class="i18n-en">Tap</span></dt><dd><span class="i18n-it">3+3 funzioni, base in vetro nero</span><span class="i18n-en">3+3 functions, black glass base</span></dd></div>
-                    <div><dt><span class="i18n-it">Ingombro miscelatore</span><span class="i18n-en">Tap size</span></dt><dd><span class="i18n-it">Base 297 x 67 mm, altezza 424 mm, sporgenza 214 mm<small>Attacchi M28x1,5 e M32x1,5</small></span><span class="i18n-en">Base 297 x 67 mm, height 424 mm, reach 214 mm<small>M28x1.5 and M32x1.5 threads</small></span></dd></div>
-                    <div><dt><span class="i18n-it">Lavello</span><span class="i18n-en">Sink</span></dt><dd><span class="i18n-it">860 x 500 mm, sopratop</span><span class="i18n-en">860 x 500 mm, topmount</span></dd></div>
-                    <div><dt><span class="i18n-it">Foro di incasso</span><span class="i18n-en">Worktop cutout</span></dt><dd><span class="i18n-it">840 x 480 mm</span><span class="i18n-en">840 x 480 mm</span></dd></div>
-                    <div><dt><span class="i18n-it">Vasca</span><span class="i18n-en">Bowl</span></dt><dd><span class="i18n-it">Larghezza ≈ 798 mm in alto, 780 mm sul fondo</span><span class="i18n-en">Width ≈ 798 mm at top, 780 mm at bottom</span></dd></div>
-                    <div><dt><span class="i18n-it">Mobile</span><span class="i18n-en">Cabinet</span></dt><dd><span class="i18n-it">Base da 90 cm</span><span class="i18n-en">90 cm base unit</span></dd></div>
-                    <div><dt><span class="i18n-it">Fissaggio</span><span class="i18n-en">Mounting</span></dt><dd><span class="i18n-it">9 morsetti (3 fronte, 2 retro, 2 per lato), 1 di scorta</span><span class="i18n-en">9 clips (3 front, 2 back, 2 per side), 1 spare</span></dd></div>
-                    <div><dt><span class="i18n-it">Troppo pieno</span><span class="i18n-en">Overflow</span></dt><dd><span class="i18n-it">Collegabile a sinistra o a destra</span><span class="i18n-en">Connects on the left or right</span></dd></div>
-                    <div><dt><span class="i18n-it">Allacciamento</span><span class="i18n-en">Water supply</span></dt><dd><span class="i18n-it">2 flessibili 3/8" da 80 cm (rosso caldo, blu freddo)</span><span class="i18n-en">2 × 3/8" flexible hoses, 80 cm (red hot, blue cold)</span></dd></div>
-                    <div><dt><span class="i18n-it">Pressione di esercizio</span><span class="i18n-en">Operating pressure</span></dt><dd><span class="i18n-it">0,1 – 0,5 MPa<small>Oltre: installare un riduttore di pressione</small></span><span class="i18n-en">0.1 – 0.5 MPa<small>Above: fit a pressure reducer</small></span></dd></div>
-                    <div><dt><span class="i18n-it">Doccetta</span><span class="i18n-en">Pull-out head</span></dt><dd><span class="i18n-it">3 getti, tubo estraibile 150 cm, sfera di gravità</span><span class="i18n-en">3 sprays, 150 cm pull-out hose, gravity weight</span></dd></div>
-                    <div><dt><span class="i18n-it">Display</span><span class="i18n-en">Display</span></dt><dd><span class="i18n-it">Temperatura e tempo di erogazione, turbina idroelettrica</span><span class="i18n-en">Temperature and running time, hydroelectric turbine</span></dd></div>
-                    <div><dt><span class="i18n-it">Peso netto</span><span class="i18n-en">Net weight</span></dt><dd><span class="i18n-it">14,25 kg<small>Lavello 11,65 kg · miscelatore 2,6 kg</small></span><span class="i18n-en">14.25 kg<small>Sink 11.65 kg · tap 2.6 kg</small></span></dd></div>
-                    <div><dt><span class="i18n-it">Peso lordo</span><span class="i18n-en">Gross weight</span></dt><dd><span class="i18n-it">18,95 kg, in due scatole</span><span class="i18n-en">18.95 kg, in two boxes</span></dd></div>
-                </dl>
-            </details>
-        </div>
-    </section>
 
     <!-- ======================= CONFRONTO ======================= -->
     <section class="block" id="confronto">
@@ -2012,28 +2292,28 @@
                     <thead>
                         <tr>
                             <th scope="col"><span class="i18n-it">Caratteristica</span><span class="i18n-en">Feature</span></th>
-                            <th scope="col">LYD9009<small><span class="i18n-it">Top di gamma</span><span class="i18n-en">Flagship</span></small></th>
                             <th scope="col">LYD9000<small><span class="i18n-it">Design LED · GunGrey</span><span class="i18n-en">LED Design · GunGrey</span></small></th>
+                            <th scope="col">LYD9009<small><span class="i18n-it">Top di gamma</span><span class="i18n-en">Flagship</span></small></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="group"><th colspan="3"><span class="i18n-it">Funzioni</span><span class="i18n-en">Functions</span></th></tr>
-                        <tr><th scope="row"><span class="i18n-it">Miscelatore</span><span class="i18n-en">Tap</span></th><td><span class="i18n-it">7+3 funzioni</span><span class="i18n-en">7+3 functions</span></td><td><span class="i18n-it">3+3 funzioni</span><span class="i18n-en">3+3 functions</span></td></tr>
-                        <tr><th scope="row"><span class="i18n-it">Pulsanti di erogazione</span><span class="i18n-en">Outlet buttons</span></th><td><span class="i18n-it">4</span><span class="i18n-en">4</span></td><td><span class="i18n-it">2</span><span class="i18n-en">2</span></td></tr>
+                        <tr><th scope="row"><span class="i18n-it">Miscelatore</span><span class="i18n-en">Tap</span></th><td><span class="i18n-it">3+3 funzioni</span><span class="i18n-en">3+3 functions</span></td><td><span class="i18n-it">7+3 funzioni</span><span class="i18n-en">7+3 functions</span></td></tr>
+                        <tr><th scope="row"><span class="i18n-it">Pulsanti di erogazione</span><span class="i18n-en">Outlet buttons</span></th><td><span class="i18n-it">2</span><span class="i18n-en">2</span></td><td><span class="i18n-it">4</span><span class="i18n-en">4</span></td></tr>
                         <tr><th scope="row"><span class="i18n-it">Doccetta estraibile a 3 getti</span><span class="i18n-en">3-spray pull-out head</span></th><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td></tr>
                         <tr><th scope="row"><span class="i18n-it">Getto a pioggia Rain</span><span class="i18n-en">Rain stream</span></th><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td></tr>
-                        <tr><th scope="row"><span class="i18n-it">Getto a cascata Waterfall</span><span class="i18n-en">Waterfall stream</span></th><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td><td class="no">—</td></tr>
-                        <tr><th scope="row"><span class="i18n-it">Lava bicchieri</span><span class="i18n-en">Cup washer</span></th><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td><td class="no">—</td></tr>
-                        <tr><th scope="row"><span class="i18n-it">Dispenser sapone</span><span class="i18n-en">Soap dispenser</span></th><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td><td class="no">—</td></tr>
-                        <tr><th scope="row"><span class="i18n-it">Comando dello scarico</span><span class="i18n-en">Drain control knob</span></th><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td><td class="no">—</td></tr>
+                        <tr><th scope="row"><span class="i18n-it">Getto a cascata Waterfall</span><span class="i18n-en">Waterfall stream</span></th><td class="no">—</td><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td></tr>
+                        <tr><th scope="row"><span class="i18n-it">Lava bicchieri</span><span class="i18n-en">Cup washer</span></th><td class="no">—</td><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td></tr>
+                        <tr><th scope="row"><span class="i18n-it">Dispenser sapone</span><span class="i18n-en">Soap dispenser</span></th><td class="no">—</td><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td></tr>
+                        <tr><th scope="row"><span class="i18n-it">Comando dello scarico</span><span class="i18n-en">Drain control knob</span></th><td class="no">—</td><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td></tr>
                         <tr><th scope="row"><span class="i18n-it">Display temperatura e tempo</span><span class="i18n-en">Temperature and time display</span></th><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td><td><span class="i18n-it">Sì</span><span class="i18n-en">Yes</span></td></tr>
                         <tr><th scope="row"><span class="i18n-it">Alimentazione display</span><span class="i18n-en">Display power</span></th><td><span class="i18n-it">Turbina idroelettrica</span><span class="i18n-en">Hydroelectric turbine</span></td><td><span class="i18n-it">Turbina idroelettrica</span><span class="i18n-en">Hydroelectric turbine</span></td></tr>
                         <tr class="group"><th colspan="3"><span class="i18n-it">Misure e pesi</span><span class="i18n-en">Size and weight</span></th></tr>
                         <tr><th scope="row"><span class="i18n-it">Lavello</span><span class="i18n-en">Sink</span></th><td><span class="i18n-it">860 x 500 mm</span><span class="i18n-en">860 x 500 mm</span></td><td><span class="i18n-it">860 x 500 mm</span><span class="i18n-en">860 x 500 mm</span></td></tr>
                         <tr><th scope="row"><span class="i18n-it">Foro di incasso</span><span class="i18n-en">Cutout</span></th><td><span class="i18n-it">840 x 480 mm</span><span class="i18n-en">840 x 480 mm</span></td><td><span class="i18n-it">840 x 480 mm</span><span class="i18n-en">840 x 480 mm</span></td></tr>
-                        <tr><th scope="row"><span class="i18n-it">Base miscelatore</span><span class="i18n-en">Tap base</span></th><td><span class="i18n-it">858 x 75 mm</span><span class="i18n-en">858 x 75 mm</span></td><td><span class="i18n-it">297 x 67 mm</span><span class="i18n-en">297 x 67 mm</span></td></tr>
-                        <tr><th scope="row"><span class="i18n-it">Altezza miscelatore</span><span class="i18n-en">Tap height</span></th><td><span class="i18n-it">433 mm</span><span class="i18n-en">433 mm</span></td><td><span class="i18n-it">424 mm</span><span class="i18n-en">424 mm</span></td></tr>
-                        <tr><th scope="row"><span class="i18n-it">Peso netto del set</span><span class="i18n-en">Set net weight</span></th><td><span class="i18n-it">17,1 kg</span><span class="i18n-en">17.1 kg</span></td><td><span class="i18n-it">14,25 kg</span><span class="i18n-en">14.25 kg</span></td></tr>
+                        <tr><th scope="row"><span class="i18n-it">Base miscelatore</span><span class="i18n-en">Tap base</span></th><td><span class="i18n-it">297 x 67 mm</span><span class="i18n-en">297 x 67 mm</span></td><td><span class="i18n-it">858 x 75 mm</span><span class="i18n-en">858 x 75 mm</span></td></tr>
+                        <tr><th scope="row"><span class="i18n-it">Altezza miscelatore</span><span class="i18n-en">Tap height</span></th><td><span class="i18n-it">424 mm</span><span class="i18n-en">424 mm</span></td><td><span class="i18n-it">433 mm</span><span class="i18n-en">433 mm</span></td></tr>
+                        <tr><th scope="row"><span class="i18n-it">Peso netto del set</span><span class="i18n-en">Set net weight</span></th><td><span class="i18n-it">14,25 kg</span><span class="i18n-en">14.25 kg</span></td><td><span class="i18n-it">17,1 kg</span><span class="i18n-en">17.1 kg</span></td></tr>
                         <tr class="group"><th colspan="3"><span class="i18n-it">Materiali e sicurezza</span><span class="i18n-en">Materials and safety</span></th></tr>
                         <tr><th scope="row"><span class="i18n-it">Lavello</span><span class="i18n-en">Sink</span></th><td><span class="i18n-it">INOX 304 PVD Black, Honeycomb</span><span class="i18n-en">304 steel PVD Black, Honeycomb</span></td><td><span class="i18n-it">INOX 304 PVD Black, Honeycomb</span><span class="i18n-en">304 steel PVD Black, Honeycomb</span></td></tr>
                         <tr><th scope="row"><span class="i18n-it">Base miscelatore</span><span class="i18n-en">Tap base</span></th><td><span class="i18n-it">Vetro nero</span><span class="i18n-en">Black glass</span></td><td><span class="i18n-it">Vetro nero</span><span class="i18n-en">Black glass</span></td></tr>
@@ -2174,7 +2454,7 @@
                         <li><span class="i18n-it"><b>Pulsanti:</b> se serve regolarli, usa la brugola in dotazione.</span><span class="i18n-en"><b>Buttons:</b> adjust them with the supplied Allen key if needed.</span></li>
                     </ul>
                 </div>
-                <div>
+                <div class="care__avoid">
                     <h3><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M5 5l12 12M17 5L5 17"/></svg><span class="i18n-it">Da evitare</span><span class="i18n-en">Avoid</span></h3>
                     <ul>
                         <li><span class="i18n-it"><b>Ammoniaca, candeggina e prodotti per WC:</b> rovinano la superficie di lavello e miscelatore.</span><span class="i18n-en"><b>Ammonia, bleach and toilet cleaners:</b> they damage the sink and tap surface.</span></li>
@@ -2262,15 +2542,15 @@
     </section>
 
     <!-- ======================= RISORSE ======================= -->
-    <section class="resources" id="presentazione-download">
+    <section class="resources" id="presentazione">
         <div class="shell">
             <div class="resources__head">
                 <h2 class="resources__title">
-                    <span class="i18n-it">Presentazione &amp; Download</span>
-                    <span class="i18n-en">Presentation &amp; Download</span>
+                    <span class="i18n-it">Presentazione</span>
+                    <span class="i18n-en">Presentation</span>
                     <span class="resources__title-sub">
-                        <span class="i18n-it">Video &amp; Download — Guarda il video e scarica il materiale</span>
-                        <span class="i18n-en">Video &amp; Download — Watch the video and download materials</span>
+                        <span class="i18n-it">Il video ufficiale Love Your Dream</span>
+                        <span class="i18n-en">The official Love Your Dream video</span>
                     </span>
                 </h2>
             </div>
@@ -2278,29 +2558,103 @@
             <div class="film">
                 <iframe id="presentation-video" src="" data-video-it="BP49pd8HVwg" data-video-en="WC2P7-I9xJ4" title="Love Your Dream Presentation Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
+        </div>
+    </section>
 
-            <div class="downloads downloads--3">
+    <!-- ======================= DOWNLOAD ======================= -->
+    <section class="resources resources--alt" id="download">
+        <div class="shell">
+            <div class="resources__head">
+                <h2 class="resources__title">
+                    <span class="i18n-it">Download</span>
+                    <span class="i18n-en">Download</span>
+                    <span class="resources__title-sub">
+                        <span class="i18n-it">Catalogo, benchmark e disegni tecnici</span>
+                        <span class="i18n-en">Catalog, benchmark and technical drawings</span>
+                    </span>
+                </h2>
+            </div>
+
+            <div class="downloads">
                 <a href="assets/Catalogo%20-%20Love%20Your%20Dream%20-%20Pagina%20Singola.pdf" id="catalog-link" data-pdf-it="assets/Catalogo%20-%20Love%20Your%20Dream%20-%20Pagina%20Singola.pdf" data-pdf-en="assets/Catalog%20-%20LYD%20-%20UK.pdf" class="dl" target="_blank">
+                    <div class="dl__top">
+                        <span class="dl__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+                        </span>
+                        <span class="dl__format">PDF</span>
+                    </div>
                     <span class="dl__label">
-                        <span class="i18n-it is-block">Consulta il Catalogo (PDF)</span>
-                        <span class="i18n-en is-block">View Catalog (PDF)</span>
+                        <span class="i18n-it is-block">Catalogo Prodotti</span>
+                        <span class="i18n-en is-block">Product Catalog</span>
                         <span>
-                            <span class="i18n-it">Scarica il catalogo prodotti</span>
-                            <span class="i18n-en">Download the product catalog</span>
+                            <span class="i18n-it">Gamma completa, materiali e finiture</span>
+                            <span class="i18n-en">Full range, materials and finishes</span>
                         </span>
                     </span>
-                    <span class="dl__arrow">→</span>
+                    <span class="dl__foot">
+                        <span><span class="i18n-it">Scarica</span><span class="i18n-en">Download</span></span>
+                        <span class="dl__arrow">→</span>
+                    </span>
                 </a>
                 <a href="assets/Benchmark%20LYD%202026.pdf" class="dl" target="_blank">
+                    <div class="dl__top">
+                        <span class="dl__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M4 19h16"/><path d="M7 19v-6M12 19V7M17 19v-9"/></svg>
+                        </span>
+                        <span class="dl__format">PDF</span>
+                    </div>
                     <span class="dl__label">
-                        <span class="i18n-it is-block">Consulta il Benchmark (PDF)</span>
-                        <span class="i18n-en is-block">View Benchmark (PDF)</span>
+                        <span class="i18n-it is-block">Benchmark Tecnico</span>
+                        <span class="i18n-en is-block">Technical Benchmark</span>
                         <span>
-                            <span class="i18n-it">Confronto tecnico e prestazioni</span>
-                            <span class="i18n-en">Technical comparison and performance</span>
+                            <span class="i18n-it">Confronto prestazioni con la concorrenza</span>
+                            <span class="i18n-en">Performance comparison with competitors</span>
                         </span>
                     </span>
-                    <span class="dl__arrow">→</span>
+                    <span class="dl__foot">
+                        <span><span class="i18n-it">Scarica</span><span class="i18n-en">Download</span></span>
+                        <span class="dl__arrow">→</span>
+                    </span>
+                </a>
+                <a href="assets/LYD_9009.png" class="dl" target="_blank" download>
+                    <div class="dl__top">
+                        <span class="dl__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="8" cy="9" r="1.4"/></svg>
+                        </span>
+                        <span class="dl__format">PNG</span>
+                    </div>
+                    <span class="dl__label">
+                        <span class="i18n-it is-block">Disegno Tecnico LYD9009</span>
+                        <span class="i18n-en is-block">Technical Drawing LYD9009</span>
+                        <span>
+                            <span class="i18n-it">Quote e ingombri per l'incasso</span>
+                            <span class="i18n-en">Dimensions and clearances for installation</span>
+                        </span>
+                    </span>
+                    <span class="dl__foot">
+                        <span><span class="i18n-it">Scarica</span><span class="i18n-en">Download</span></span>
+                        <span class="dl__arrow">→</span>
+                    </span>
+                </a>
+                <a href="assets/LYD_9000.png" class="dl" target="_blank" download>
+                    <div class="dl__top">
+                        <span class="dl__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="8" cy="9" r="1.4"/></svg>
+                        </span>
+                        <span class="dl__format">PNG</span>
+                    </div>
+                    <span class="dl__label">
+                        <span class="i18n-it is-block">Disegno Tecnico LYD9000</span>
+                        <span class="i18n-en is-block">Technical Drawing LYD9000</span>
+                        <span>
+                            <span class="i18n-it">Quote e ingombri per l'incasso</span>
+                            <span class="i18n-en">Dimensions and clearances for installation</span>
+                        </span>
+                    </span>
+                    <span class="dl__foot">
+                        <span><span class="i18n-it">Scarica</span><span class="i18n-en">Download</span></span>
+                        <span class="dl__arrow">→</span>
+                    </span>
                 </a>
             </div>
         </div>
@@ -2677,7 +3031,30 @@
             var pAvail = document.getElementById("panelAvail");
             var pDesc = document.getElementById("panelDesc");
             var pUse = document.getElementById("panelUse");
+            var pShot = document.getElementById("panelShot");
             var toggles = document.querySelectorAll(".model-toggle button");
+
+            /* Immagine di dettaglio del render per ciascun elemento */
+            var IMG = {
+                "9009": {
+                    cup:       "assets/explorer/9009-cup.jpg",
+                    soap:      "assets/explorer/9009-soap.jpg",
+                    drain:     "assets/explorer/9009-drain.jpg",
+                    waterfall: "assets/explorer/9009-waterfall.jpg",
+                    keys4:     "assets/explorer/9009-keys4.jpg",
+                    spout:     "assets/explorer/9009-spout.jpg",
+                    display:   "assets/explorer/9009-display.jpg",
+                    rain:      "assets/explorer/9009-rain.jpg",
+                    handle:    "assets/explorer/9009-handle.jpg"
+                },
+                "9000": {
+                    keys2:   "assets/explorer/9000-keys2.jpg",
+                    spout:   "assets/explorer/9000-spout.jpg",
+                    display: "assets/explorer/9000-display.jpg",
+                    rain:    "assets/explorer/9000-rain.jpg",
+                    handle:  "assets/explorer/9000-handle.jpg"
+                }
+            };
 
             var ICONS = {
                 cup: '<path d="M9 5h12l-2 10a4 4 0 0 1-8 0z"/><path d="M15 19v6M11 26h8"/>',
@@ -2731,7 +3108,7 @@
                     en: { l: "Handle", t: "Control handle", d: "It is the main switch: it opens the water and sets the temperature.", u: "Lift to open. Left for hotter, right for colder. Always lower it after use." } }
             };
 
-            var model = "9009";
+            var model = "9000";
             var current = "handle";
             function lang() { return document.documentElement.classList.contains("lang-en") ? "en" : "it"; }
 
@@ -2741,6 +3118,9 @@
                 pAvail.textContent = d.a[L];
                 pDesc.textContent = d[L].d;
                 pUse.innerHTML = "<b>" + (L === "en" ? "How to use" : "Come si usa") + "</b>" + d[L].u;
+                var src = (IMG[model] && IMG[model][current]) || "";
+                if (pShot.getAttribute("src") !== src) { pShot.src = src; }
+                pShot.alt = d[L].t;
                 if (animate) {
                     panel.classList.remove("is-swapping");
                     void panel.offsetWidth;
@@ -2797,13 +3177,79 @@
             renderPanel(false);
         })();
 
+        /* ---------- Carosello modelli (stile Apple) ---------- */
+        (function initProductCarousel() {
+            var viewport = document.getElementById("pcViewport");
+            var track = document.getElementById("pcTrack");
+            if (!viewport || !track) return;
+            var slides = Array.prototype.slice.call(track.querySelectorAll(".pc__slide"));
+            var tabs = document.querySelectorAll(".pc__tab");
+            var dots = document.querySelectorAll(".pc__dot");
+            var prevBtn = document.getElementById("pcPrev");
+            var nextBtn = document.getElementById("pcNext");
+            var idx = 0;
+            var count = slides.length;
+
+            function setHeight() {
+                var active = slides[idx];
+                viewport.style.height = active.offsetHeight + "px";
+            }
+
+            function render(animate) {
+                track.classList.toggle("is-animating", !!animate);
+                track.style.transform = "translateX(-" + (idx * (100 / count)) + "%)";
+                slides.forEach(function (s, i) { s.classList.toggle("is-active", i === idx); });
+                tabs.forEach(function (t) { t.setAttribute("aria-pressed", String(Number(t.getAttribute("data-idx")) === idx)); });
+                dots.forEach(function (d) { d.setAttribute("aria-pressed", String(Number(d.getAttribute("data-idx")) === idx)); });
+                setHeight();
+            }
+
+            function goTo(i) {
+                idx = Math.max(0, Math.min(count - 1, i));
+                render(true);
+            }
+
+            tabs.forEach(function (t) {
+                t.addEventListener("click", function () { goTo(Number(t.getAttribute("data-idx"))); });
+            });
+            dots.forEach(function (d) {
+                d.addEventListener("click", function () { goTo(Number(d.getAttribute("data-idx"))); });
+            });
+            if (prevBtn) prevBtn.addEventListener("click", function () { goTo(idx === 0 ? count - 1 : idx - 1); });
+            if (nextBtn) nextBtn.addEventListener("click", function () { goTo(idx === count - 1 ? 0 : idx + 1); });
+
+            /* Swipe touch, come un carosello nativo */
+            var touchStartX = null;
+            viewport.addEventListener("touchstart", function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+            viewport.addEventListener("touchend", function (e) {
+                if (touchStartX === null) return;
+                var dx = e.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(dx) > 40) goTo(dx < 0 ? idx + 1 : idx - 1);
+                touchStartX = null;
+            }, { passive: true });
+
+            /* Riallinea l'altezza se il contenuto cambia (resize, apertura scheda tecnica, cambio lingua) */
+            window.addEventListener("resize", setHeight);
+            slides.forEach(function (s) {
+                var d = s.querySelector(".datasheet");
+                if (d) d.addEventListener("toggle", setHeight);
+            });
+            var prevOnLangChange = window.onLangChange;
+            window.onLangChange = function (lang) {
+                if (typeof prevOnLangChange === "function") prevOnLangChange(lang);
+                setHeight();
+            };
+
+            render(false);
+        })();
+
         /* ---------- Nav: evidenzia la sezione visibile ---------- */
         (function initSpy() {
             var links = document.querySelectorAll(".site-nav a");
             if (!links.length || !("IntersectionObserver" in window)) return;
             var map = {};
             links.forEach(function (a) { map[a.getAttribute("href").slice(1)] = a; });
-            var alias = { lyd9000: "lyd9009", uso: "confronto" };
+            var alias = { uso: "confronto" };
             var io = new IntersectionObserver(function (entries) {
                 entries.forEach(function (en) {
                     if (!en.isIntersecting) return;

@@ -94,6 +94,12 @@
         --brand:      #467392;
         --brand-deep: #223b4a;   /* variante scura, per gradienti e sfondi */
         --brand-light:#7ea3bc;   /* variante chiara, per testo su fondo scuro */
+
+        /* --- Raggi: scala unica per bottoni, card, pannelli --- */
+        --radius-sm:   4px;   /* elementi piccoli: chip, mod, barra */
+        --radius-md:   10px;  /* card: download, pannelli scuri */
+        --radius-lg:   22px;  /* superfici ampie: mask del carosello */
+        --radius-pill: 999px; /* pillole: switch, tab, bottoni */
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -143,7 +149,7 @@
     header {
         position: sticky;
         top: 0;
-        z-index: 100;
+        z-index: 160;
         background: rgba(242, 239, 233, 0.86);
         backdrop-filter: blur(14px) saturate(120%);
         -webkit-backdrop-filter: blur(14px) saturate(120%);
@@ -166,21 +172,108 @@
         align-items: center;
         gap: 18px;
     }
-    .btn-header-quick {
+    /* --- Sistema pulsanti: pillola, coerente in header / hero / drawer --- */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
         font-family: var(--display);
         font-weight: 500;
-        font-size: 0.68rem;
-        letter-spacing: 0.22em;
+        font-size: 0.7rem;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
         text-decoration: none;
-        color: var(--ink);
-        padding-bottom: 4px;
-        border-bottom: 1px solid var(--ink);
         white-space: nowrap;
-        transition: opacity 0.3s ease;
+        border-radius: var(--radius-pill);
+        padding: 13px 24px;
+        border: 1px solid var(--ink);
+        color: var(--ink);
+        background: transparent;
+        cursor: pointer;
+        transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
     }
-    .btn-header-quick:hover { opacity: 0.55; }
-    .btn-header-quick--ghost { color: var(--brand); border-bottom-color: var(--brand); }
+    .btn--fill { background: var(--ink); color: var(--paper); }
+    .btn--fill:hover { background: var(--ink-soft); border-color: var(--ink-soft); }
+    .btn--line:hover { background: var(--ink); color: var(--paper); }
+    .btn--brand { border-color: var(--brand); color: var(--brand); }
+    .btn--brand:hover { background: var(--brand); color: var(--paper); border-color: var(--brand); }
+    .btn--sm { padding: 9px 18px; font-size: 0.64rem; letter-spacing: 0.13em; }
+    .btn:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+
+    /* --- Hamburger: mostra il menu quando la nav estesa non c'è --- */
+    .nav-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-pill);
+        background: rgba(255,255,255,0.35);
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+    .nav-toggle span {
+        display: block;
+        width: 15px;
+        height: 1px;
+        background: var(--ink);
+        transition: transform 0.35s cubic-bezier(.16,.8,.2,1), opacity 0.25s ease;
+    }
+    .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .nav-toggle:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+
+    .mobile-nav__scrim {
+        position: fixed;
+        inset: 0;
+        z-index: 149;
+        background: rgba(26, 25, 23, 0.4);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+    }
+    .mobile-nav {
+        position: fixed;
+        top: 0; right: 0; bottom: 0;
+        z-index: 150;
+        width: min(340px, 86vw);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 32px;
+        padding: 28px 28px 34px;
+        background: var(--paper);
+        border-left: 1px solid var(--line);
+        transform: translateX(100%);
+        transition: transform 0.45s cubic-bezier(.16,.8,.2,1);
+        overflow-y: auto;
+    }
+    .mobile-nav nav { display: flex; flex-direction: column; margin-top: 52px; }
+    .mobile-nav nav a {
+        font-family: var(--display);
+        font-weight: 400;
+        font-size: 1.15rem;
+        letter-spacing: -0.005em;
+        color: var(--ink);
+        text-decoration: none;
+        padding: 15px 0;
+        border-top: 1px solid var(--line-soft);
+    }
+    .mobile-nav nav a:last-child { border-bottom: 1px solid var(--line-soft); }
+    .mobile-nav__actions { display: flex; flex-direction: column; gap: 12px; }
+    .mobile-nav__actions .btn { width: 100%; }
+    body.nav-open { overflow: hidden; }
+    body.nav-open .mobile-nav__scrim { opacity: 1; visibility: visible; transition: opacity 0.4s ease; }
+    body.nav-open .mobile-nav { transform: translateX(0); }
+    @media (prefers-reduced-motion: reduce) {
+        .mobile-nav, .mobile-nav__scrim, .nav-toggle span { transition: none; }
+    }
 
     .lang-switch {
         display: inline-flex;
@@ -191,7 +284,7 @@
         letter-spacing: 0.14em;
         line-height: 1;
         border: 1px solid var(--line);
-        border-radius: 999px;
+        border-radius: var(--radius-pill);
         overflow: hidden;
         background: rgba(255,255,255,0.35);
         flex-shrink: 0;
@@ -217,13 +310,10 @@
     @media (max-width: 620px) {
         .header-flex { padding: 16px 10px; }
         header img { max-width: 122px; }
-        .header-actions { gap: 14px; }
-        .btn-header-quick { font-size: 0.6rem; letter-spacing: 0.16em; }
+        .header-actions { gap: 10px; }
+        .nav-toggle { width: 34px; height: 34px; }
         .lang-switch { font-size: 0.62rem; }
         .lang-switch button { padding: 7px 10px; }
-    }
-    @media (max-width: 460px) {
-        .btn-header-quick { display: none; }
     }
 
     /* ======================= HERO ======================= */
@@ -250,7 +340,7 @@
         z-index: 1;
         background:
             radial-gradient(120% 95% at 8% 78%, rgba(242,239,233,0.92) 0%, rgba(242,239,233,0.66) 34%, rgba(242,239,233,0.12) 66%, transparent 82%),
-            linear-gradient(180deg, rgba(242,239,233,0.42) 0%, rgba(242,239,233,0.20) 40%, rgba(242,239,233,0.70) 100%);
+            linear-gradient(180deg, rgba(242,239,233,0.46) 0%, rgba(242,239,233,0.22) 40%, rgba(242,239,233,0.72) 100%);
     }
     .hero__inner {
         position: relative;
@@ -263,6 +353,7 @@
     }
 
     .hero__eyebrow {
+        text-shadow: 0 1px 14px rgba(242,239,233,0.9);
         opacity: 0;
         animation: rise 1s ease-out forwards;
         animation-delay: 0.2s;
@@ -308,41 +399,44 @@
         animation-delay: 0.9s;
     }
     .hero__subquote {
-        font-size: clamp(0.9rem, 1.8vw, 1.05rem);
-        font-style: italic;
-        color: var(--ink-soft);
-        margin-top: 0.2em;
-        text-shadow: 0 1px 12px rgba(242,239,233,0.9);
-        opacity: 0;
-        animation: rise 1s ease-out forwards;
-        animation-delay: 1.05s;
-    }
-
-    .hero__foot {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        gap: 20px;
-        max-width: var(--measure);
-        margin: 0 auto;
-        width: 100%;
-        padding: 0 var(--gutter) 5vh;
-    }
-    .hero__tagline {
         font-family: var(--display);
         font-weight: 500;
         font-size: clamp(0.82rem, 1.6vw, 1rem);
         letter-spacing: 0.02em;
         color: var(--ink-soft);
-        max-width: 34ch;
+        margin-top: 0.6em;
         text-shadow: 0 1px 12px rgba(242,239,233,0.9);
+        opacity: 0;
+        animation: rise 1s ease-out forwards;
+        animation-delay: 1.05s;
+    }
+    .hero__cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: clamp(28px, 4vw, 44px);
         opacity: 0;
         animation: rise 1s ease-out forwards;
         animation-delay: 1.3s;
     }
-    .hero__tagline em { display: block; font-style: italic; color: var(--ink-mute); margin-top: 3px; }
+    .btn--frost {
+        background: rgba(242,239,233,0.55);
+        backdrop-filter: blur(10px) saturate(140%);
+        -webkit-backdrop-filter: blur(10px) saturate(140%);
+    }
+    .btn--frost:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+    .hero__foot {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        max-width: var(--measure);
+        margin: 0 auto;
+        width: 100%;
+        padding: 0 var(--gutter) 5vh;
+    }
     .hero__scroll {
         font-family: var(--display);
         font-size: 0.66rem;
@@ -362,9 +456,6 @@
     }
     @media (prefers-reduced-motion: reduce) {
         [class*="hero__"] { animation: none !important; opacity: 1 !important; transform: none !important; }
-    }
-    @media (max-width: 720px) {
-        .hero__foot { flex-direction: column; align-items: flex-start; gap: 14px; }
     }
 
     /* ======================= INDICE / MANIFESTO ======================= */
@@ -508,7 +599,7 @@
     .pc__switch {
         display: inline-flex;
         border: 1.5px solid rgba(255,255,255,0.9);
-        border-radius: 999px;
+        border-radius: var(--radius-pill);
         overflow: hidden;
         background: rgba(255,255,255,0.45);
         backdrop-filter: blur(18px) saturate(180%);
@@ -545,7 +636,7 @@
     .pc__mask {
         position: relative;
         overflow: hidden;
-        border-radius: 24px;
+        border-radius: var(--radius-lg);
         border: 1.5px solid rgba(255,255,255,0.9);
         background: rgba(255,255,255,0.42);
         backdrop-filter: blur(26px) saturate(180%);
@@ -842,7 +933,8 @@
         color: var(--ink);
         background: rgba(255,255,255,0.55);
         border: 1px solid var(--line);
-        border-radius: 6px;
+        border-radius: var(--radius-md);
+        box-shadow: 0 2px 10px rgba(34,59,74,0.04);
         transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
     }
     .dl:hover {
@@ -856,6 +948,7 @@
         width: 44px; height: 44px;
         border-radius: 50%;
         border: 1px solid rgba(70,115,146,0.35);
+        background: rgba(70,115,146,0.08);
         display: flex; align-items: center; justify-content: center;
         color: var(--brand);
         flex-shrink: 0;
@@ -870,7 +963,7 @@
         letter-spacing: 0.14em;
         color: var(--ink-mute);
         border: 1px solid var(--line);
-        border-radius: 999px;
+        border-radius: var(--radius-pill);
         padding: 4px 10px;
         white-space: nowrap;
     }
@@ -980,7 +1073,7 @@
         display: flex;
         align-items: center;
         border: 1px solid rgba(242,239,233,0.3);
-        border-radius: 999px;
+        border-radius: var(--radius-pill);
         overflow: hidden;
         opacity: 0;
         transition: opacity 0.4s ease 0.2s;
@@ -1093,7 +1186,7 @@
         }
         .site-nav a:hover, .site-nav a.is-active { color: var(--ink); }
         .site-nav a:hover::after, .site-nav a.is-active::after { transform: scaleX(1); }
-        .btn-header-quick { display: none; }
+        .nav-toggle, .mobile-nav, .mobile-nav__scrim { display: none; }
     }
     section[id] { scroll-margin-top: 76px; }
 
@@ -1144,13 +1237,14 @@
         flex-wrap: wrap;
         margin-bottom: 22px;
     }
-    .model-toggle {
+    .explorer__toggles { display: flex; gap: 12px; flex-wrap: wrap; }
+    .model-toggle, .view-toggle {
         display: inline-flex;
         border: 1px solid rgba(126,163,188,0.4);
-        border-radius: 999px;
+        border-radius: var(--radius-pill);
         overflow: hidden;
     }
-    .model-toggle button {
+    .model-toggle button, .view-toggle button {
         appearance: none;
         border: 0;
         background: transparent;
@@ -1163,8 +1257,8 @@
         cursor: pointer;
         transition: background 0.3s ease, color 0.3s ease;
     }
-    .model-toggle button + button { border-left: 1px solid rgba(126,163,188,0.4); }
-    .model-toggle button[aria-pressed="true"] { background: var(--brand); color: var(--paper); }
+    .model-toggle button + button, .view-toggle button + button { border-left: 1px solid rgba(126,163,188,0.4); }
+    .model-toggle button[aria-pressed="true"], .view-toggle button[aria-pressed="true"] { background: var(--brand); color: var(--paper); }
     .hint-mob { display: none; }
     @media (max-width: 760px) { .hint-desk { display: none; } .hint-mob { display: inline; } }
     .explorer__hint { font-size: 0.8rem; color: var(--brand-light); font-style: italic; }
@@ -1178,7 +1272,7 @@
         width: 100%;
         background: linear-gradient(180deg, #1c333f 0%, #0d1a20 100%);
         border: 1px solid rgba(126,163,188,0.3);
-        border-radius: 4px;
+        border-radius: var(--radius-sm);
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
         transition: width 0.7s cubic-bezier(.16,.8,.2,1);
     }
@@ -1194,9 +1288,9 @@
         justify-content: center;
         gap: 10px;
         padding: 12px 6px;
-        background: transparent;
+        background: rgba(126,163,188,0.05);
         border: 1px solid rgba(126,163,188,0.22);
-        border-radius: 2px;
+        border-radius: var(--radius-sm);
         color: rgba(242,239,233,0.62);
         cursor: pointer;
         transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
@@ -1257,7 +1351,7 @@
     .panel__shot {
         position: relative;
         aspect-ratio: 4 / 3;
-        border-radius: 6px;
+        border-radius: var(--radius-md);
         overflow: hidden;
         background: #0c1519;
         border: 1px solid rgba(126,163,188,0.3);
@@ -1286,6 +1380,37 @@
         .bar, .bar-scale { transition: none; }
         .panel.is-swapping > * { animation: none; }
     }
+
+    /* --- Vista Accessori: stessa cornice fotografica del pannello comandi --- */
+    .acc-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: clamp(18px, 3vw, 30px);
+        margin-top: clamp(30px, 4vw, 52px);
+        padding-top: clamp(26px, 3vw, 40px);
+        border-top: 1px solid rgba(126,163,188,0.28);
+    }
+    .acc-card { display: flex; flex-direction: column; gap: 14px; }
+    .acc-card__shot {
+        position: relative;
+        aspect-ratio: 4 / 3;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background: #0c1519;
+        border: 1px solid rgba(126,163,188,0.3);
+    }
+    .acc-card__shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .acc-card__shot::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        box-shadow: inset 0 0 30px rgba(0,0,0,0.35);
+        pointer-events: none;
+    }
+    .acc-card__name { font-family: var(--display); font-weight: 400; font-size: 1.02rem; letter-spacing: -0.01em; color: var(--paper); }
+    .acc-card__desc { font-size: 0.85rem; color: rgba(242,239,233,0.7); line-height: 1.6; }
+    @media (max-width: 900px) { .acc-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .acc-grid { grid-template-columns: 1fr; } }
 
     /* ======================= SCHEDA TECNICA (espandibile) ======================= */
     .datasheet {
@@ -1496,7 +1621,7 @@
     @media (max-width: 760px) { .care { grid-template-columns: 1fr; } }
 
     /* "Da evitare": in risalto col turchese del brand */
-    .care__avoid { padding: clamp(20px, 3vw, 32px); background: rgba(70,115,146,0.06); border: 1px solid rgba(70,115,146,0.25); border-radius: 4px; }
+    .care__avoid { padding: clamp(20px, 3vw, 32px); background: rgba(70,115,146,0.06); border: 1px solid rgba(70,115,146,0.25); border-radius: var(--radius-sm); }
     .care__avoid h3 { border-bottom-color: var(--brand); color: var(--brand); }
     .care__avoid h3 svg { stroke: var(--brand); }
     .care__avoid li { border-bottom-color: rgba(70,115,146,0.18); }
@@ -1645,6 +1770,52 @@
         color: rgba(242,239,233,0.5);
     }
     @media (max-width: 680px) { .footer-grid { grid-template-columns: 1fr; } }
+
+    /* ======================= REVEAL ON SCROLL ======================= */
+    /* Stessa firma "rise" della hero, applicata leggera alle testate di sezione. */
+    html.reveal-ready .block__head,
+    html.reveal-ready .manifesto__item,
+    html.reveal-ready .product__masthead,
+    html.reveal-ready .pc__head,
+    html.reveal-ready .resources__head,
+    html.reveal-ready .downloads .dl,
+    html.reveal-ready .howto__item {
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 0.7s cubic-bezier(.16,.8,.2,1), transform 0.7s cubic-bezier(.16,.8,.2,1);
+    }
+    html.reveal-ready .block__head.is-revealed,
+    html.reveal-ready .manifesto__item.is-revealed,
+    html.reveal-ready .product__masthead.is-revealed,
+    html.reveal-ready .pc__head.is-revealed,
+    html.reveal-ready .resources__head.is-revealed,
+    html.reveal-ready .downloads .dl.is-revealed,
+    html.reveal-ready .howto__item.is-revealed {
+        opacity: 1;
+        transform: none;
+    }
+    html.reveal-ready .manifesto__item:nth-child(2) { transition-delay: 0.06s; }
+    html.reveal-ready .manifesto__item:nth-child(3) { transition-delay: 0.12s; }
+    html.reveal-ready .manifesto__item:nth-child(4) { transition-delay: 0.18s; }
+    html.reveal-ready .downloads .dl:nth-child(2) { transition-delay: 0.06s; }
+    html.reveal-ready .downloads .dl:nth-child(3) { transition-delay: 0.12s; }
+    html.reveal-ready .downloads .dl:nth-child(4) { transition-delay: 0.18s; }
+    html.reveal-ready .howto__item:nth-child(2) { transition-delay: 0.06s; }
+    html.reveal-ready .howto__item:nth-child(3) { transition-delay: 0.12s; }
+    html.reveal-ready .howto__item:nth-child(4) { transition-delay: 0.18s; }
+    @media (prefers-reduced-motion: reduce) {
+        html.reveal-ready .block__head,
+        html.reveal-ready .manifesto__item,
+        html.reveal-ready .product__masthead,
+        html.reveal-ready .pc__head,
+        html.reveal-ready .resources__head,
+        html.reveal-ready .downloads .dl,
+        html.reveal-ready .howto__item {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+        }
+    }
     </style>
 </head>
 <body id="top">
@@ -1664,18 +1835,37 @@
                 <a href="#download">Download</a>
             </nav>
             <div class="header-actions">
-                <a href="#presentazione" class="btn-header-quick btn-header-quick--ghost">
-                    <span class="i18n-it">Guarda la Presentazione</span>
-                    <span class="i18n-en">Watch the Presentation</span>
-                </a>
-                <a href="#download" class="btn-header-quick">
-                    <span class="i18n-it">Download / Media</span>
-                    <span class="i18n-en">Download / Media</span>
-                </a>
+                <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Apri il menu / Open menu">
+                    <span></span><span></span><span></span>
+                </button>
                 <div class="lang-switch" role="group" aria-label="Selettore lingua / Language selector">
                     <button type="button" id="lang-it" onclick="setLang('it')" aria-pressed="true" lang="it">IT</button>
                     <button type="button" id="lang-en" onclick="setLang('en')" aria-pressed="false" lang="en">EN</button>
                 </div>
+            </div>
+        </div>
+
+        <div class="mobile-nav__scrim" id="mobileNavScrim"></div>
+        <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+            <nav aria-label="Sezioni">
+                <a href="#sistema" data-close-nav><span class="i18n-it">Il sistema</span><span class="i18n-en">The system</span></a>
+                <a href="#lyd9009" data-close-nav><span class="i18n-it">Modelli</span><span class="i18n-en">Models</span></a>
+                <a href="#confronto" data-close-nav><span class="i18n-it">Confronto</span><span class="i18n-en">Compare</span></a>
+                <a href="#installazione" data-close-nav><span class="i18n-it">Installazione</span><span class="i18n-en">Installation</span></a>
+                <a href="#cura" data-close-nav><span class="i18n-it">Cura</span><span class="i18n-en">Care</span></a>
+                <a href="#assistenza" data-close-nav><span class="i18n-it">Assistenza</span><span class="i18n-en">Support</span></a>
+                <a href="#presentazione" data-close-nav><span class="i18n-it">Presentazione</span><span class="i18n-en">Presentation</span></a>
+                <a href="#download" data-close-nav>Download</a>
+            </nav>
+            <div class="mobile-nav__actions">
+                <a href="#presentazione" class="btn btn--brand" data-close-nav>
+                    <span class="i18n-it">Guarda la Presentazione</span>
+                    <span class="i18n-en">Watch the Presentation</span>
+                </a>
+                <a href="#download" class="btn btn--fill" data-close-nav>
+                    <span class="i18n-it">Download / Media</span>
+                    <span class="i18n-en">Download / Media</span>
+                </a>
             </div>
         </div>
     </header>
@@ -1694,18 +1884,27 @@
             <h1 class="hero__title">
                 Love Your Dream
             </h1>
-            <p class="hero__quote">Every great kitchen starts with a dream</p>
-            <p class="hero__subquote">
+            <p class="hero__quote">
                 <span class="i18n-it">Ogni grande cucina nasce da un sogno</span>
                 <span class="i18n-en">Every great kitchen starts with a dream</span>
             </p>
-        </div>
-
-        <div class="hero__foot">
-            <p class="hero__tagline">
+            <p class="hero__subquote">
                 <span class="i18n-it">Il cuore tecnologico della tua cucina</span>
                 <span class="i18n-en">The technological heart of your kitchen</span>
             </p>
+            <div class="hero__cta">
+                <a href="#lyd9009" class="btn btn--fill">
+                    <span class="i18n-it">Scopri i modelli</span>
+                    <span class="i18n-en">Explore the models</span>
+                </a>
+                <a href="#presentazione" class="btn btn--frost">
+                    <span class="i18n-it">Guarda il video</span>
+                    <span class="i18n-en">Watch the video</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="hero__foot">
             <p class="hero__scroll">
                 <span class="i18n-it">↓ Scorri</span>
                 <span class="i18n-en">↓ Scroll</span>
@@ -1861,36 +2060,50 @@
             </div>
 
             <div class="explorer__top">
-                <div class="model-toggle" role="group" aria-label="Modello / Model">
-                    <button type="button" data-model="9000" aria-pressed="true">LYD9000</button>
-                    <button type="button" data-model="9009" aria-pressed="false">LYD9009</button>
+                <div class="explorer__toggles">
+                    <div class="view-toggle" role="group" aria-label="Vista / View" id="viewToggle">
+                        <button type="button" data-view="comandi" aria-pressed="true">
+                            <span class="i18n-it">Comandi</span><span class="i18n-en">Controls</span>
+                        </button>
+                        <button type="button" data-view="accessori" aria-pressed="false">
+                            <span class="i18n-it">Accessori</span><span class="i18n-en">Accessories</span>
+                        </button>
+                    </div>
+                    <div class="model-toggle" role="group" aria-label="Modello / Model" id="modelToggle">
+                        <button type="button" data-model="9000" aria-pressed="true">LYD9000</button>
+                        <button type="button" data-model="9009" aria-pressed="false">LYD9009</button>
+                    </div>
                 </div>
-                <p class="explorer__hint">
+                <p class="explorer__hint" id="explorerHint">
                     <span class="hint-desk"><span class="i18n-it">Schema della base, vista dall'alto</span><span class="i18n-en">Base layout, top view</span></span>
                     <span class="hint-mob"><span class="i18n-it">Scorri di lato per tutti i comandi</span><span class="i18n-en">Swipe sideways for all controls</span></span>
                 </p>
             </div>
 
-            <div class="bar-scroll">
-                <div class="bar-wrap">
-                    <div class="bar" id="bar" role="group" aria-label="Comandi / Controls"></div>
-                    <div class="bar-scale" id="barScale"></div>
+            <div class="explorer__view" id="viewComandi">
+                <div class="bar-scroll">
+                    <div class="bar-wrap">
+                        <div class="bar" id="bar" role="group" aria-label="Comandi / Controls"></div>
+                        <div class="bar-scale" id="barScale"></div>
+                    </div>
+                </div>
+
+                <div class="panel" id="panel" aria-live="polite">
+                    <figure class="panel__shot">
+                        <img id="panelShot" src="" alt="">
+                    </figure>
+                    <div>
+                        <h3 class="panel__title" id="panelTitle"></h3>
+                        <p class="panel__avail" id="panelAvail"></p>
+                    </div>
+                    <div>
+                        <p class="panel__desc" id="panelDesc"></p>
+                        <p class="panel__use" id="panelUse"></p>
+                    </div>
                 </div>
             </div>
 
-            <div class="panel" id="panel" aria-live="polite">
-                <figure class="panel__shot">
-                    <img id="panelShot" src="" alt="">
-                </figure>
-                <div>
-                    <h3 class="panel__title" id="panelTitle"></h3>
-                    <p class="panel__avail" id="panelAvail"></p>
-                </div>
-                <div>
-                    <p class="panel__desc" id="panelDesc"></p>
-                    <p class="panel__use" id="panelUse"></p>
-                </div>
-            </div>
+            <div class="explorer__view acc-grid" id="viewAccessori" hidden></div>
         </div>
     </section>
 
@@ -2798,6 +3011,39 @@
             setLang(lang);
         })();
 
+        /* ---------- Menu mobile ---------- */
+        (function initMobileNav() {
+            var toggle = document.getElementById("navToggle");
+            var nav = document.getElementById("mobileNav");
+            var scrim = document.getElementById("mobileNavScrim");
+            if (!toggle || !nav || !scrim) return;
+
+            function open() {
+                document.body.classList.add("nav-open");
+                toggle.setAttribute("aria-expanded", "true");
+                nav.setAttribute("aria-hidden", "false");
+            }
+            function close() {
+                document.body.classList.remove("nav-open");
+                toggle.setAttribute("aria-expanded", "false");
+                nav.setAttribute("aria-hidden", "true");
+                toggle.focus({ preventScroll: true });
+            }
+            toggle.addEventListener("click", function () {
+                if (document.body.classList.contains("nav-open")) close(); else open();
+            });
+            scrim.addEventListener("click", close);
+            nav.querySelectorAll("[data-close-nav]").forEach(function (el) {
+                el.addEventListener("click", close);
+            });
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape" && document.body.classList.contains("nav-open")) close();
+            });
+            window.addEventListener("resize", function () {
+                if (window.innerWidth >= 1180 && document.body.classList.contains("nav-open")) close();
+            });
+        })();
+
         /* ---------- Lightbox con zoom ---------- */
         var LB = (function () {
             var modal  = document.getElementById("imageModal");
@@ -3041,6 +3287,29 @@
             var pUse = document.getElementById("panelUse");
             var pShot = document.getElementById("panelShot");
             var toggles = document.querySelectorAll(".model-toggle button");
+            var explorerHint = document.getElementById("explorerHint");
+            var modelToggleEl = document.getElementById("modelToggle");
+            var viewToggleBtns = document.querySelectorAll("#viewToggle button");
+            var viewComandiEl = document.getElementById("viewComandi");
+            var viewAccessoriEl = document.getElementById("viewAccessori");
+            var hintComandiHTML = explorerHint ? explorerHint.innerHTML : "";
+            var hintAccessoriHTML = '<span class="i18n-it">Inclusi in ogni confezione</span><span class="i18n-en">Included in every box</span>';
+
+            /* Accessori inclusi nella confezione, comuni a LYD9000 e LYD9009 */
+            var ACCESSORIES = [
+                { img: "assets/explorer/accessorio-cestello-tappo.jpg",
+                    it: { n: "Vaschetta con tappo", d: "Vaschetta in acciaio inox con tappo, per scolare o trattenere l'acqua sul fondo della vasca." },
+                    en: { n: "Basin with plug", d: "Stainless steel basin with drain plug, to drain or hold water at the bottom of the bowl." } },
+                { img: "assets/explorer/accessorio-cestello-forato.jpg",
+                    it: { n: "Cestello forato", d: "Cestello forato in acciaio inox, per scolare frutta, verdura e stoviglie." },
+                    en: { n: "Perforated basket", d: "Perforated stainless steel basket, for draining fruit, vegetables and dishes." } },
+                { img: "assets/explorer/accessorio-tagliere-bamboo.jpg",
+                    it: { n: "Tagliere in bambù", d: "Tagliere in legno di bambù, si appoggia sui bordi della vasca come piano di lavoro." },
+                    en: { n: "Bamboo board", d: "Bamboo cutting board, rests on the bowl's edges as a worktop." } },
+                { img: "assets/explorer/accessorio-tagliere-metallo.jpg",
+                    it: { n: "Tagliere in acciaio", d: "Tagliere in acciaio inox satinato, superficie igienica per il taglio quotidiano." },
+                    en: { n: "Steel board", d: "Satin stainless steel cutting board, a hygienic surface for everyday cutting." } }
+            ];
 
             /* Immagine di dettaglio del render per ciascun elemento */
             var IMG = {
@@ -3180,7 +3449,36 @@
                 });
             });
 
-            window.onLangChange = function () { renderBar(); renderPanel(false); };
+            function renderAccessories() {
+                if (!viewAccessoriEl) return;
+                var L = lang();
+                viewAccessoriEl.innerHTML = ACCESSORIES.map(function (a) {
+                    return '<div class="acc-card"><figure class="acc-card__shot"><img src="' + a.img + '" alt="' + a[L].n + '" loading="lazy"></figure>' +
+                        '<div><p class="acc-card__name">' + a[L].n + '</p><p class="acc-card__desc">' + a[L].d + '</p></div></div>';
+                }).join("");
+            }
+
+            function setView(view) {
+                var isAcc = view === "accessori";
+                viewToggleBtns.forEach(function (b) {
+                    b.setAttribute("aria-pressed", String(b.getAttribute("data-view") === view));
+                });
+                if (viewComandiEl) viewComandiEl.hidden = isAcc;
+                if (viewAccessoriEl) viewAccessoriEl.hidden = !isAcc;
+                if (modelToggleEl) modelToggleEl.style.display = isAcc ? "none" : "inline-flex";
+                if (explorerHint) explorerHint.innerHTML = isAcc ? hintAccessoriHTML : hintComandiHTML;
+                if (isAcc) renderAccessories();
+            }
+
+            viewToggleBtns.forEach(function (b) {
+                b.addEventListener("click", function () { setView(b.getAttribute("data-view")); });
+            });
+
+            window.onLangChange = function () {
+                renderBar();
+                renderPanel(false);
+                if (viewAccessoriEl && !viewAccessoriEl.hidden) renderAccessories();
+            };
             renderBar();
             renderPanel(false);
         })();
@@ -3302,6 +3600,30 @@
                 window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
                 btn.blur();
             });
+        })();
+
+        /* ---------- Reveal on scroll: testate di sezione e card ---------- */
+        (function initReveal() {
+            if (!("IntersectionObserver" in window)) return;
+            var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+            if (reduce.matches) return;
+
+            var targets = document.querySelectorAll(
+                ".block__head, .manifesto__item, .product__masthead, .pc__head, .resources__head, .downloads .dl, .howto__item"
+            );
+            if (!targets.length) return;
+
+            document.documentElement.classList.add("reveal-ready");
+
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add("is-revealed");
+                    io.unobserve(entry.target);
+                });
+            }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+
+            targets.forEach(function (el) { io.observe(el); });
         })();
     </script>
 

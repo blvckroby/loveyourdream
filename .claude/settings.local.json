@@ -1,0 +1,11 @@
+{
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "21st"
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(curl *)"
+    ]
+  }
+}

@@ -104,7 +104,7 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: clip; }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
     body {
@@ -114,6 +114,7 @@
         color: var(--ink);
         line-height: 1.75;
         font-size: 16px;
+        overflow-x: clip;
     }
 
     ::selection { background: var(--ink); color: var(--paper); }
@@ -1844,31 +1845,31 @@
                 </div>
             </div>
         </div>
-
-        <div class="mobile-nav__scrim" id="mobileNavScrim"></div>
-        <div class="mobile-nav" id="mobileNav" aria-hidden="true">
-            <nav aria-label="Sezioni">
-                <a href="#sistema" data-close-nav><span class="i18n-it">Il sistema</span><span class="i18n-en">The system</span></a>
-                <a href="#lyd9009" data-close-nav><span class="i18n-it">Modelli</span><span class="i18n-en">Models</span></a>
-                <a href="#confronto" data-close-nav><span class="i18n-it">Confronto</span><span class="i18n-en">Compare</span></a>
-                <a href="#installazione" data-close-nav><span class="i18n-it">Installazione</span><span class="i18n-en">Installation</span></a>
-                <a href="#cura" data-close-nav><span class="i18n-it">Cura</span><span class="i18n-en">Care</span></a>
-                <a href="#assistenza" data-close-nav><span class="i18n-it">Assistenza</span><span class="i18n-en">Support</span></a>
-                <a href="#presentazione" data-close-nav><span class="i18n-it">Presentazione</span><span class="i18n-en">Presentation</span></a>
-                <a href="#download" data-close-nav>Download</a>
-            </nav>
-            <div class="mobile-nav__actions">
-                <a href="#presentazione" class="btn btn--brand" data-close-nav>
-                    <span class="i18n-it">Guarda la Presentazione</span>
-                    <span class="i18n-en">Watch the Presentation</span>
-                </a>
-                <a href="#download" class="btn btn--fill" data-close-nav>
-                    <span class="i18n-it">Download / Media</span>
-                    <span class="i18n-en">Download / Media</span>
-                </a>
-            </div>
-        </div>
     </header>
+
+    <div class="mobile-nav__scrim" id="mobileNavScrim"></div>
+    <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+        <nav aria-label="Sezioni">
+            <a href="#sistema" data-close-nav><span class="i18n-it">Il sistema</span><span class="i18n-en">The system</span></a>
+            <a href="#lyd9009" data-close-nav><span class="i18n-it">Modelli</span><span class="i18n-en">Models</span></a>
+            <a href="#confronto" data-close-nav><span class="i18n-it">Confronto</span><span class="i18n-en">Compare</span></a>
+            <a href="#installazione" data-close-nav><span class="i18n-it">Installazione</span><span class="i18n-en">Installation</span></a>
+            <a href="#cura" data-close-nav><span class="i18n-it">Cura</span><span class="i18n-en">Care</span></a>
+            <a href="#assistenza" data-close-nav><span class="i18n-it">Assistenza</span><span class="i18n-en">Support</span></a>
+            <a href="#presentazione" data-close-nav><span class="i18n-it">Presentazione</span><span class="i18n-en">Presentation</span></a>
+            <a href="#download" data-close-nav>Download</a>
+        </nav>
+        <div class="mobile-nav__actions">
+            <a href="#presentazione" class="btn btn--brand" data-close-nav>
+                <span class="i18n-it">Guarda la Presentazione</span>
+                <span class="i18n-en">Watch the Presentation</span>
+            </a>
+            <a href="#download" class="btn btn--fill" data-close-nav>
+                <span class="i18n-it">Download / Media</span>
+                <span class="i18n-en">Download / Media</span>
+            </a>
+        </div>
+    </div>
 
     <!-- ======================= HERO ======================= -->
     <section class="hero">

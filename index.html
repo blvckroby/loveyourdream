@@ -1976,8 +1976,9 @@
         font-size: 0.92rem;
         color: var(--ink-soft);
         line-height: 1.65;
-        max-width: 56ch;
-        margin-bottom: clamp(22px, 3vw, 30px);
+        margin: 0 0 clamp(22px, 3vw, 30px);
+        padding-bottom: clamp(18px, 2.4vw, 24px);
+        border-bottom: 1px solid var(--line);
     }
 
     /* ---- Campi ---- */
@@ -1994,6 +1995,74 @@
         margin-bottom: 4px;
     }
     .tk-hint { display: block; font-size: 0.82rem; color: var(--ink-mute); margin-bottom: 16px; line-height: 1.5; }
+
+    /* Etichetta con il pulsante informativo accanto */
+    .tk-label--info { display: flex; align-items: center; gap: 10px; }
+    .tk-i {
+        width: 18px; height: 18px;
+        flex-shrink: 0;
+        padding: 0;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background: transparent;
+        color: var(--ink-mute);
+        font-family: var(--display);
+        font-size: 10px;
+        font-weight: 500;
+        font-style: italic;
+        line-height: 1;
+        letter-spacing: 0;
+        text-transform: none;
+        cursor: pointer;
+        transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    .tk-i:hover, .tk-i[aria-expanded="true"] { background: var(--brand); border-color: var(--brand); color: var(--paper); }
+    .tk-i:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+
+    /* Finestrella: dove si trova il numero di serie */
+    .tk-help {
+        margin: 0 0 16px;
+        padding: 20px 22px;
+        border: 1px solid var(--line);
+        border-left: 2px solid var(--brand);
+        border-radius: var(--radius-md);
+        background: var(--paper-2);
+        animation: tkHelpIn 0.35s cubic-bezier(.16,.8,.2,1) both;
+    }
+    @keyframes tkHelpIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .tk-help { animation: none; } }
+    .tk-help__h {
+        margin: 0 0 14px;
+        font-family: var(--display);
+        font-weight: 500;
+        font-size: 0.72rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink);
+    }
+    .tk-help__grid { display: grid; grid-template-columns: 1fr 200px; gap: 24px; align-items: start; }
+    @media (max-width: 620px) { .tk-help__grid { grid-template-columns: 1fr; gap: 18px; } }
+    .tk-help__p { margin: 0; font-size: 0.85rem; color: var(--ink-soft); line-height: 1.6; }
+    .tk-help__p + .tk-help__p { margin-top: 10px; }
+    .tk-help__p b { font-family: var(--display); font-weight: 500; color: var(--ink); }
+    .tk-help__note {
+        margin: 14px 0 0;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+        font-size: 0.82rem;
+        font-style: italic;
+        color: var(--ink-mute);
+        line-height: 1.55;
+    }
+    .tk-help__fig { margin: 0; }
+    .tk-help__fig svg { width: 100%; height: auto; display: block; }
+    .tk-help__fig figcaption {
+        margin-top: 8px;
+        font-size: 0.74rem;
+        font-style: italic;
+        color: var(--ink-mute);
+        text-align: center;
+    }
 
     /* ---- Scelta del modello ---- */
     .tk-picker { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -2171,6 +2240,16 @@
     .tk-drop svg { width: 30px; height: 30px; fill: none; stroke: var(--brand); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
     .tk-drop b { font-family: var(--display); font-weight: 500; font-size: 0.98rem; color: var(--ink); }
     .tk-drop > span { font-size: 0.8rem; color: var(--ink-mute); line-height: 1.5; }
+    .tk-drop__max {
+        margin-top: 4px;
+        padding-top: 8px;
+        border-top: 1px solid var(--line-soft);
+        font-family: var(--display);
+        font-size: 0.68rem !important;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink-mute);
+    }
     .tk-drop:hover, .tk-drop.is-over { border-color: var(--brand); background: rgba(70, 115, 146, 0.06); }
     .tk-drop.is-over { border-style: solid; }
     .tk-drop input:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
@@ -3429,7 +3508,7 @@
                             src=""
                             data-video-it="rTNxyKO-Kf4"
                             data-video-en="OJo4gGNy4Xw"
-                            title="Love Your Dream — Presentazione"
+                            title="Love Your Dream — Spiegazione tecnica LYD9009"
                             loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             referrerpolicy="strict-origin-when-cross-origin"
@@ -3439,8 +3518,8 @@
                     <figcaption class="film-cap">
                         <span class="film-cap__n">01</span>
                         <span class="film-cap__t">
-                            <span class="i18n-it">Presentazione ufficiale</span>
-                            <span class="i18n-en">Official presentation</span>
+                            <span class="i18n-it">Spiegazione tecnica del modello (LYD9009)</span>
+                            <span class="i18n-en">Technical walkthrough of the (LYD9009)</span>
                         </span>
                     </figcaption>
                 </figure>
@@ -3451,7 +3530,7 @@
                             src=""
                             data-video-it="v1yTbjAUf8I"
                             data-video-en="ch-y1FmEC7s"
-                            title="Love Your Dream — Il prodotto in funzione"
+                            title="Love Your Dream — Dimostrazione LYD9009"
                             loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             referrerpolicy="strict-origin-when-cross-origin"
@@ -3461,8 +3540,8 @@
                     <figcaption class="film-cap">
                         <span class="film-cap__n">02</span>
                         <span class="film-cap__t">
-                            <span class="i18n-it">Il prodotto in funzione</span>
-                            <span class="i18n-en">The product in use</span>
+                            <span class="i18n-it">Dimostrazione del modello (LYD9009)</span>
+                            <span class="i18n-en">LYD9009 demonstration</span>
                         </span>
                     </figcaption>
                 </figure>
@@ -3617,7 +3696,7 @@
 
                     <div class="tk-field" style="padding-top:0;">
                         <span class="tk-label" id="tk-model-label">
-                            <span class="i18n-it">Quale modello hai?</span>
+                            <span class="i18n-it">Quale modello possiedi?</span>
                             <span class="i18n-en">Which model do you have?</span>
                         </span>
                         <span class="tk-hint">
@@ -3665,10 +3744,68 @@
                     </div>
 
                     <div class="tk-field">
-                        <label class="tk-label" for="tk-serial">
+                        <label class="tk-label tk-label--info" for="tk-serial">
                             <span class="i18n-it">Numero di serie</span>
                             <span class="i18n-en">Serial number</span>
+                            <button type="button" class="tk-i" id="tkSerialInfo" aria-expanded="false" aria-controls="tkSerialHelp"
+                                    aria-label="Dove si trova il numero di serie / Where to find the serial number">i</button>
                         </label>
+
+                        <div class="tk-help" id="tkSerialHelp" hidden>
+                            <p class="tk-help__h">
+                                <span class="i18n-it">Dove si trova il numero di serie</span>
+                                <span class="i18n-en">Where to find the serial number</span>
+                            </p>
+                            <div class="tk-help__grid">
+                                <div>
+                                    <p class="tk-help__p">
+                                        <span class="i18n-it">Le etichette identificative sono sul <b>miscelatore</b>, insieme a quelle del codice EAN e del controllo qualità. Cerca quella intitolata <b>“Serial Number Code / Codice Numero di Serie”</b>: il numero è stampato sotto il codice a barre.</span>
+                                        <span class="i18n-en">The identification labels are on the <b>mixer tap</b>, next to the EAN code and quality control ones. Look for the one headed <b>“Serial Number Code / Codice Numero di Serie”</b>: the number is printed below the barcode.</span>
+                                    </p>
+                                    <p class="tk-help__p">
+                                        <span class="i18n-it">Sono quindici caratteri, per esempio <b>9000S2026030321</b>. Le trovi anche sull'ultima pagina del manuale d'uso.</span>
+                                        <span class="i18n-en">It is fifteen characters, for example <b>9000S2026030321</b>. The labels are also shown on the last page of the user manual.</span>
+                                    </p>
+                                    <p class="tk-help__note">
+                                        <span class="i18n-it">Non lo trovi? Lascia il campo vuoto e allega la foto dell'etichetta al passo successivo: ci pensiamo noi.</span>
+                                        <span class="i18n-en">Cannot find it? Leave the field empty and attach a photo of the label in the next step: we will take it from there.</span>
+                                    </p>
+                                </div>
+                                <figure class="tk-help__fig">
+                                    <svg viewBox="0 0 180 96" role="img" aria-label="Etichetta con codice a barre e numero di serie">
+                                        <rect x="0.5" y="0.5" width="179" height="95" rx="3" fill="#fff" stroke="#cdc7bb"/>
+                                        <text x="12" y="18" font-family="Inter, sans-serif" font-size="7" fill="#8c877e">Serial Number Code</text>
+                                        <g fill="#1a1917">
+                                            <rect x="14" y="28" width="2" height="34"/><rect x="18" y="28" width="1" height="34"/>
+                                            <rect x="21" y="28" width="3" height="34"/><rect x="26" y="28" width="1" height="34"/>
+                                            <rect x="29" y="28" width="2" height="34"/><rect x="34" y="28" width="1" height="34"/>
+                                            <rect x="37" y="28" width="1" height="34"/><rect x="40" y="28" width="3" height="34"/>
+                                            <rect x="45" y="28" width="1" height="34"/><rect x="48" y="28" width="2" height="34"/>
+                                            <rect x="53" y="28" width="3" height="34"/><rect x="58" y="28" width="1" height="34"/>
+                                            <rect x="61" y="28" width="2" height="34"/><rect x="66" y="28" width="1" height="34"/>
+                                            <rect x="69" y="28" width="1" height="34"/><rect x="72" y="28" width="3" height="34"/>
+                                            <rect x="77" y="28" width="2" height="34"/><rect x="82" y="28" width="1" height="34"/>
+                                            <rect x="85" y="28" width="3" height="34"/><rect x="90" y="28" width="1" height="34"/>
+                                            <rect x="93" y="28" width="2" height="34"/><rect x="98" y="28" width="1" height="34"/>
+                                            <rect x="101" y="28" width="1" height="34"/><rect x="104" y="28" width="3" height="34"/>
+                                            <rect x="109" y="28" width="2" height="34"/><rect x="114" y="28" width="1" height="34"/>
+                                            <rect x="117" y="28" width="3" height="34"/><rect x="122" y="28" width="1" height="34"/>
+                                            <rect x="125" y="28" width="2" height="34"/><rect x="130" y="28" width="1" height="34"/>
+                                            <rect x="133" y="28" width="1" height="34"/><rect x="136" y="28" width="3" height="34"/>
+                                            <rect x="141" y="28" width="2" height="34"/><rect x="146" y="28" width="1" height="34"/>
+                                            <rect x="149" y="28" width="3" height="34"/><rect x="154" y="28" width="1" height="34"/>
+                                            <rect x="157" y="28" width="2" height="34"/><rect x="162" y="28" width="1" height="34"/>
+                                        </g>
+                                        <rect x="12" y="68" width="156" height="18" rx="2" fill="none" stroke="#467392" stroke-width="1.2"/>
+                                        <text x="90" y="80" text-anchor="middle" font-family="Consolas, monospace" font-size="10" fill="#1a1917" letter-spacing="1">9000S2026030321</text>
+                                    </svg>
+                                    <figcaption>
+                                        <span class="i18n-it">Il numero è quello riquadrato</span>
+                                        <span class="i18n-en">The number is the boxed one</span>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
                         <span class="tk-hint">
                             <span class="i18n-it">Facoltativo. Se non lo trovi va benissimo lo stesso: al passo dopo potrai allegare la foto dell'etichetta.</span>
                             <span class="i18n-en">Optional. If you cannot find it that is fine: in the next step you can attach a photo of the label.</span>
@@ -3686,12 +3823,12 @@
 
                     <div class="tk-field" style="padding-top:0;">
                         <label class="tk-label" for="tk-problem">
-                            <span class="i18n-it">Che cosa non funziona?</span>
+                            <span class="i18n-it">Cosa non funziona?</span>
                             <span class="i18n-en">What is not working?</span>
                         </label>
                         <span class="tk-hint">
-                            <span class="i18n-it">Che cosa succede, da quando e in quale momento.</span>
-                            <span class="i18n-en">What happens, since when and in which situation.</span>
+                            <span class="i18n-it">Descrivici dettagliatamente il problema riscontrato.</span>
+                            <span class="i18n-en">Describe the problem you have encountered in detail.</span>
                         </span>
                         <textarea id="tk-problem" name="problem" maxlength="1200" aria-describedby="tk-problem-err tk-count"
                             data-ph-it="es. Il display resta spento anche con l'acqua aperta, da circa una settimana."
@@ -3731,6 +3868,7 @@
                             <svg viewBox="0 0 34 34" aria-hidden="true"><path d="M17 23V8"/><path d="M11 14l6-6 6 6"/><path d="M4 22v4a2 2 0 0 0 2 2h22a2 2 0 0 0 2-2v-4"/></svg>
                             <b><span class="i18n-it">Trascina qui le foto</span><span class="i18n-en">Drag your photos here</span></b>
                             <span><span class="i18n-it">oppure tocca per sceglierle · JPG, PNG o PDF</span><span class="i18n-en">or tap to choose them · JPG, PNG or PDF</span></span>
+                            <span class="tk-drop__max"><span class="i18n-it">Fino a 10 MB per file, 20 MB in tutto</span><span class="i18n-en">Up to 10 MB per file, 20 MB in total</span></span>
                         </div>
                         <ul class="tk-thumbs" id="tkThumbs"></ul>
                         <p class="tk-files-note" id="tk-files-note">
@@ -3889,14 +4027,13 @@
             <div class="footer-grid">
                 <div class="footer-box">
                     <h3>
-                        <span class="i18n-it">Produttore</span>
-                        <span class="i18n-en">Manufacturer</span>
+                        <span class="i18n-it">Asian headquarter</span>
+                        <span class="i18n-en">Asian headquarter</span>
                     </h3>
                     <p><strong>Love Your Dream HK Limited</strong></p>
                     <p>Room B 16\F Eubank Plaza 9</p>
                     <p>Chiu Lung Street Central, Hong Kong</p>
                     <p>E-mail: <a href="mailto:info@loveyourdream.shop">info@loveyourdream.shop</a></p>
-                    <p><a href="#ticket" data-ticket-open><span class="i18n-it">Apri un ticket di assistenza</span><span class="i18n-en">Open a support ticket</span></a></p>
                 </div>
                 <div class="footer-box">
                     <h3>
@@ -4648,7 +4785,7 @@
                     shareBtn: "Invia con le foto", mailBtn: "Prepara l'email",
                     sending: "Invio in corso…",
                     remove: "Togli",
-                    tooBig: "Questo file supera i 20 MB e non è stato aggiunto:",
+                    tooBig: "Questo file supera i 10 MB e non è stato aggiunto:",
                     notImg: "Accettiamo solo immagini e PDF. File ignorato:",
                     heavy: "Gli allegati pesano più di 20 MB: alcune caselle di posta li rifiutano. Prova a toglierne qualcuno.",
                     sendErr: "Invio annullato. Puoi usare l'email o copiare il testo.",
@@ -4672,7 +4809,7 @@
                     shareBtn: "Send with the photos", mailBtn: "Prepare the email",
                     sending: "Sending…",
                     remove: "Remove",
-                    tooBig: "This file is over 20 MB and was not added:",
+                    tooBig: "This file is over 10 MB and was not added:",
                     notImg: "Only images and PDFs are accepted. File ignored:",
                     heavy: "The attachments weigh more than 20 MB: some mailboxes will reject them. Try removing a few.",
                     sendErr: "Sending cancelled. Use the email or copy the text instead.",
@@ -4835,9 +4972,30 @@
                 return ok;
             }
 
+            /* ======================= DOVE STA IL SERIALE ======================= */
+            (function initSerialHelp() {
+                var btn = document.getElementById("tkSerialInfo");
+                var box = document.getElementById("tkSerialHelp");
+                if (!btn || !box) return;
+                function toggle(open) {
+                    box.hidden = !open;
+                    btn.setAttribute("aria-expanded", String(open));
+                }
+                btn.addEventListener("click", function () {
+                    var open = btn.getAttribute("aria-expanded") !== "true";
+                    toggle(open);
+                    if (open) box.scrollIntoView({ block: "nearest", behavior: "smooth" });
+                });
+                /* Esc chiude solo la finestrella, non tutto il ticket. */
+                box.addEventListener("keydown", function (e) {
+                    if (e.key === "Escape") { e.stopPropagation(); toggle(false); btn.focus(); }
+                });
+                window.tkCloseSerialHelp = function () { toggle(false); };
+            })();
+
             /* ======================= ALLEGATI ======================= */
-            var MAX_ONE = 20 * 1024 * 1024;
-            var MAX_ALL = 20 * 1024 * 1024;
+            var MAX_ONE = 10 * 1024 * 1024;   /* oltre questo un file non entra */
+            var MAX_ALL = 20 * 1024 * 1024;   /* oltre questa somma avvisiamo */
             var MAX_SIDE = 1800;
             var drop = document.getElementById("tkDrop");
             var fileInput = document.getElementById("tkFiles");
@@ -5100,6 +5258,7 @@
                 document.getElementById("tk-privacy-err").classList.remove("is-on");
                 provTouched = false;
                 provCell.classList.remove("is-auto");
+                if (window.tkCloseSerialHelp) window.tkCloseSerialHelp();
                 countEl.textContent = "0 / 1200";
                 setNote(null);
                 sent.className = "tk-sent";
